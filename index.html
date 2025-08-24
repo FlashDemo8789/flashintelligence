@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashIntelligence | The Future Arrives</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden;
+            background: #000;
+            color: #fff;
+            cursor: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #ui-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .quantum-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            mix-blend-mode: difference;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .neural-interface {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            pointer-events: auto;
+            opacity: 0;
+            animation: fadeInNeural 3s ease-out 2s forwards;
+        }
+
+        @keyframes fadeInNeural {
+            to { opacity: 1; }
+        }
+
+        .brand-mark {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 100;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 1rem;
+            filter: blur(0.5px);
+            animation: quantumGlitch 10s infinite;
+        }
+
+        @keyframes quantumGlitch {
+            0%, 100% { filter: blur(0.5px) brightness(1); }
+            50% { filter: blur(0.2px) brightness(1.2) hue-rotate(10deg); }
+        }
+
+        .tagline {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .quantum-button {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .quantum-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .quantum-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .quantum-button:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .bio-metric {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            font-family: 'Courier New', monospace;
+            pointer-events: none;
+        }
+
+        .neural-indicator {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+        }
+
+        .frequency-visualizer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 2s ease-out 3s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .voice-command {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            opacity: 0.6;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        .voice-active {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        #stats {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            opacity: 0.8;
+            font-family: monospace;
+            font-size: 10px;
+            color: #0ff;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <div id="canvas-container"></div>
+    <canvas id="ui-layer"></canvas>
+    
+    <div class="quantum-cursor"></div>
+    <div class="cursor-trail"></div>
+    
+    <div class="neural-interface">
+        <h1 class="brand-mark">FlashIntelligence</h1>
+        <p class="tagline">Investment Intelligence Redefined</p>
+        <button class="quantum-button" id="initiate">Connect with Flash</button>
+    </div>
+    
+    <div class="bio-metric">
+        <div id="heart-rate">DEALS ANALYZED: <span>72</span></div>
+        <div id="neural-activity">AI CONFIDENCE: <span>87</span>%</div>
+    </div>
+    
+    <div class="voice-command">
+        <div id="voice-status">FLASH AI: READY</div>
+        <div id="voice-transcript"></div>
+    </div>
+    
+    <canvas class="neural-indicator" id="neural-canvas"></canvas>
+    <canvas class="frequency-visualizer" id="frequency-canvas"></canvas>
+    
+    <div id="stats"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
