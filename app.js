@@ -28,7 +28,6 @@ class QuantumEngine {
         this.biometrics = { heartRate: 72, neuralActivity: 87 };
         
         // Chat system
-        this.chatMessages = [];
         this.isThinking = false;
         
         this.init();
@@ -45,7 +44,6 @@ class QuantumEngine {
         this.setupVoiceCommands();
         this.setupBiometrics();
         this.setupShaders();
-        this.setupChat();
         this.animate();
     }
     
@@ -686,8 +684,14 @@ class QuantumEngine {
                     
                     // If no command was executed and it's a question or statement, send to AI
                     if (!commandExecuted && transcript.length > 5) {
-                        // Send to Flash AI
-                        this.sendMessage(transcript);
+                        // Send to Flash AI directly
+                        this.askFlash(transcript).then(response => {
+                            this.speakResponse(response);
+                            this.triggerResponseAnimations(response);
+                        }).catch(error => {
+                            console.error('Error getting AI response:', error);
+                            this.speakResponse('Sorry, I encountered an error. Please try again.');
+                        });
                     }
                 }
             };
@@ -794,68 +798,7 @@ class QuantumEngine {
         drawUIEffects();
     }
     
-    setupChat() {
-        const chatInput = document.getElementById('chat-input');
-        const chatSend = document.getElementById('chat-send');
-        const chatMinimize = document.querySelector('.chat-minimize');
-        const chatContainer = document.querySelector('.ai-chat-container');
-        
-        // Send message on button click
-        chatSend.addEventListener('click', () => {
-            const message = chatInput.value.trim();
-            if (message) {
-                this.sendMessage(message);
-                chatInput.value = '';
-            }
-        });
-        
-        // Send message on Enter key
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const message = chatInput.value.trim();
-                if (message) {
-                    this.sendMessage(message);
-                    chatInput.value = '';
-                }
-            }
-        });
-        
-        // Minimize/maximize chat
-        chatMinimize.addEventListener('click', () => {
-            chatContainer.classList.toggle('minimized');
-            chatMinimize.textContent = chatContainer.classList.contains('minimized') ? '+' : '−';
-        });
-    }
     
-    async sendMessage(message) {
-        // Add user message to chat
-        this.addChatMessage(message, 'user');
-        
-        // Show thinking indicator
-        this.showThinking();
-        
-        try {
-            // Call Groq API
-            const response = await this.askFlash(message);
-            
-            // Remove thinking indicator
-            this.hideThinking();
-            
-            // Add AI response
-            this.addChatMessage(response, 'ai');
-            
-            // Speak the response
-            this.speakResponse(response);
-            
-            // Trigger animations based on response
-            this.triggerResponseAnimations(response);
-            
-        } catch (error) {
-            console.error('Error calling Groq:', error);
-            this.hideThinking();
-            this.addChatMessage('Sorry, I encountered an error. Please try again.', 'ai');
-        }
-    }
     
     async askFlash(question) {
         // Check if API key is set
@@ -876,10 +819,6 @@ class QuantumEngine {
                         role: "system",
                         content: FLASH_SYSTEM_PROMPT
                     },
-                    ...this.chatMessages.map(msg => ({
-                        role: msg.type === 'user' ? 'user' : 'assistant',
-                        content: msg.text
-                    })),
                     {
                         role: "user",
                         content: question
@@ -899,51 +838,8 @@ class QuantumEngine {
         return data.choices[0].message.content;
     }
     
-    addChatMessage(text, type) {
-        const chatMessagesEl = document.getElementById('chat-messages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `chat-message ${type}-message`;
-        
-        const label = document.createElement('span');
-        label.className = 'message-label';
-        label.textContent = type === 'user' ? 'You' : 'Flash AI';
-        
-        const content = document.createElement('p');
-        content.textContent = text;
-        
-        messageDiv.appendChild(label);
-        messageDiv.appendChild(content);
-        chatMessagesEl.appendChild(messageDiv);
-        
-        // Scroll to bottom
-        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-        
-        // Add to message history
-        this.chatMessages.push({ type, text });
-    }
     
-    showThinking() {
-        const chatMessagesEl = document.getElementById('chat-messages');
-        const thinkingDiv = document.createElement('div');
-        thinkingDiv.className = 'chat-message ai-message thinking-message';
-        thinkingDiv.innerHTML = `
-            <span class="message-label">Flash AI</span>
-            <div class="thinking-indicator">
-                <div class="thinking-dot"></div>
-                <div class="thinking-dot"></div>
-                <div class="thinking-dot"></div>
-            </div>
-        `;
-        chatMessagesEl.appendChild(thinkingDiv);
-        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-    }
     
-    hideThinking() {
-        const thinkingMessage = document.querySelector('.thinking-message');
-        if (thinkingMessage) {
-            thinkingMessage.remove();
-        }
-    }
     
     speakResponse(text) {
         if ('speechSynthesis' in window) {
