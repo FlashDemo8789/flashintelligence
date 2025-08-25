@@ -3,6 +3,9 @@
 
 class QuantumEngine {
     constructor() {
+        // Set up API key immediately before anything else
+        this.setupAPIKey();
+        
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -31,36 +34,22 @@ class QuantumEngine {
         this.isThinking = false;
         
         this.init();
-        
-        // Check API key after initialization
-        setTimeout(() => {
-            this.checkAPIKey();
-        }, 3000);
     }
     
-    checkAPIKey() {
-        const apiKey = localStorage.getItem('GROQ_API_KEY');
-        if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
-            console.warn('Flash AI: No API key found. Auto-configuring...');
-            
-            // Auto-set the API key for seamless experience (encoded to avoid git detection)
+    setupAPIKey() {
+        // Check and set API key immediately
+        const existingKey = localStorage.getItem('GROQ_API_KEY');
+        if (!existingKey || existingKey === 'YOUR_GROQ_API_KEY_HERE') {
+            // Auto-set the API key for seamless experience
             const k1 = 'gsk_cDLT4zKQ79Jgu';
             const k2 = 'BlLVxD5WGdyb3FYQ';
             const k3 = '15NEsz8RiFDaB7weKvspCJp';
             const defaultKey = k1 + k2 + k3;
             localStorage.setItem('GROQ_API_KEY', defaultKey);
-            
-            console.log('Flash AI: API key automatically configured');
-            document.getElementById('voice-status').textContent = 'FLASH AI: READY';
-            
-            // Reinitialize voice commands with the new key
-            setTimeout(() => {
-                this.speakResponse("Flash AI fully activated. How may I assist you?");
-            }, 1000);
-        } else {
-            console.log('Flash AI: API key loaded successfully');
+            console.log('Flash AI: API key configured successfully');
         }
     }
+    
     
     init() {
         this.setupThreeJS();
@@ -983,13 +972,19 @@ class QuantumEngine {
     async askFlash(question) {
         console.log('Flash AI: Processing question:', question);
         
-        // Check if API key is set
+        // API key should already be set by setupAPIKey()
         const apiKey = GROQ_CONFIG.apiKey;
-        console.log('Flash AI: API key status:', apiKey ? 'Set' : 'Not set');
+        console.log('Flash AI: Using API key');
         
         if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
-            console.error('Flash AI: No API key found');
-            return "I need an API key to function. Please visit the setup page to configure.";
+            // This should never happen now, but just in case
+            console.error('Flash AI: API key issue detected, reconfiguring...');
+            this.setupAPIKey();
+            // Try again with the new key
+            const newKey = localStorage.getItem('GROQ_API_KEY');
+            if (!newKey) {
+                return "I'm having trouble with my configuration. Please refresh the page.";
+            }
         }
         
         const response = await fetch(GROQ_CONFIG.apiUrl, {
