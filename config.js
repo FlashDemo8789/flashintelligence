@@ -10,10 +10,11 @@ const GROQ_CONFIG = {
         return localStorage.getItem('GROQ_API_KEY') || 'YOUR_GROQ_API_KEY_HERE';
     },
     apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
-    model: 'mixtral-8x7b-32768', // Fast and cost-effective
-    // Alternative models:
-    // 'llama2-70b-4096' - Good balance
-    // 'gemma-7b-it' - Cheapest option
+    model: 'llama-3.3-70b-versatile', // Current best model
+    // Alternative current models:
+    // 'llama-3.1-8b-instant' - Fastest response
+    // 'openai/gpt-oss-120b' - Most capable
+    // 'openai/gpt-oss-20b' - Good balance
 };
 
 // System prompt for Flash AI
