@@ -3,8 +3,9 @@
 // For demo purposes, we'll use it client-side but recommend implementing a backend proxy
 
 const GROQ_CONFIG = {
-    // Replace with your actual Groq API key
-    apiKey: 'YOUR_GROQ_API_KEY_HERE',
+    // API key is loaded from localStorage for security
+    // Use setup.html to configure your API key
+    apiKey: localStorage.getItem('GROQ_API_KEY') || 'YOUR_GROQ_API_KEY_HERE',
     apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
     model: 'mixtral-8x7b-32768', // Fast and cost-effective
     // Alternative models:
