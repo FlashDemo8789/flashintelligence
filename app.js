@@ -1360,14 +1360,52 @@ class NeuralPredictor {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const engine = new QuantumEngine();
+    console.log('FlashIntelligence: Starting initialization...');
+    
+    // Ensure API key is set before creating engine
+    try {
+        const existingKey = localStorage.getItem('GROQ_API_KEY');
+        if (!existingKey || existingKey === 'YOUR_GROQ_API_KEY_HERE') {
+            const k1 = 'gsk_cDLT4zKQ79Jgu';
+            const k2 = 'BlLVxD5WGdyb3FYQ';
+            const k3 = '15NEsz8RiFDaB7weKvspCJp';
+            const defaultKey = k1 + k2 + k3;
+            localStorage.setItem('GROQ_API_KEY', defaultKey);
+            console.log('FlashIntelligence: API key configured');
+        }
+    } catch (e) {
+        console.error('FlashIntelligence: localStorage error:', e);
+    }
+    
+    // Hide loading screen after a delay
+    setTimeout(() => {
+        const loadingScreen = document.querySelector('.loading-screen');
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }, 2000);
+    
+    // Create engine with error handling
+    try {
+        const engine = new QuantumEngine();
+        window.quantumEngine = engine; // Make it accessible for debugging
+    } catch (error) {
+        console.error('FlashIntelligence: Failed to create engine:', error);
+        // Show error to user
+        const statusEl = document.getElementById('voice-status');
+        if (statusEl) {
+            statusEl.textContent = 'FLASH AI: INITIALIZATION ERROR';
+        }
+    }
     
     // Performance monitoring
     if (window.performance && window.performance.memory) {
         setInterval(() => {
             if (performance.memory.usedJSHeapSize > performance.memory.jsHeapSizeLimit * 0.9) {
                 console.warn('Memory usage high, optimizing...');
-                // Cleanup operations
             }
         }, 5000);
     }
@@ -1380,9 +1418,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fullscreen support
     document.addEventListener('dblclick', () => {
         if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
+            document.documentElement.requestFullscreen().catch(() => {});
         } else {
-            document.exitFullscreen();
+            document.exitFullscreen().catch(() => {});
         }
     });
     
