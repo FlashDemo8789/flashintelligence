@@ -657,64 +657,197 @@ class QuantumEngine {
             this.voiceRecognition.continuous = true;
             this.voiceRecognition.interimResults = true;
             
-            this.voiceRecognition.onresult = (event) => {
+            // JARVIS-style state tracking
+            this.isAwake = false;
+            this.lastCommand = Date.now();
+            
+            this.voiceRecognition.onresult = async (event) => {
                 const result = event.results[event.results.length - 1];
                 const transcript = result[0].transcript;
                 const lowerTranscript = transcript.toLowerCase();
-                document.getElementById('voice-transcript').textContent = transcript;
+                
+                // Display transcript with fade effect
+                const transcriptEl = document.getElementById('voice-transcript');
+                transcriptEl.textContent = transcript;
+                transcriptEl.style.opacity = '1';
                 
                 // If the result is final (not interim), process it
                 if (result.isFinal) {
-                    // Check for specific commands first
-                    let commandExecuted = false;
+                    // Fade out transcript
+                    setTimeout(() => {
+                        transcriptEl.style.opacity = '0.3';
+                    }, 2000);
                     
-                    if (lowerTranscript.includes('stop')) {
-                        this.stopRotation();
-                        commandExecuted = true;
-                    } else if (lowerTranscript.includes('rotate') || lowerTranscript.includes('spin')) {
-                        this.startRotation();
-                        commandExecuted = true;
-                    } else if (lowerTranscript.includes('explode') || lowerTranscript.includes('burst')) {
-                        this.explodeParticles();
-                        commandExecuted = true;
-                    } else if (lowerTranscript.includes('color') || lowerTranscript.includes('change')) {
-                        this.changeColors();
-                        commandExecuted = true;
+                    // Wake words - JARVIS style
+                    if (lowerTranscript.includes('flash') || lowerTranscript.includes('hey flash') || 
+                        lowerTranscript.includes('ok flash')) {
+                        
+                        this.isAwake = true;
+                        this.lastCommand = Date.now();
+                        
+                        // Visual feedback - pulse effect
+                        this.pulseEffect();
+                        document.getElementById('voice-status').textContent = 'FLASH AI: ACTIVE';
+                        
+                        // JARVIS-style acknowledgments
+                        const responses = [
+                            "Yes sir?",
+                            "At your service.",
+                            "How may I assist you?",
+                            "Ready when you are.",
+                            "I'm listening.",
+                            "What can I do for you today?"
+                        ];
+                        
+                        const response = responses[Math.floor(Math.random() * responses.length)];
+                        this.speakResponse(response);
+                        
+                    } else if (this.isAwake || transcript.length > 10) {
+                        // Process command
+                        this.isAwake = false;
+                        
+                        // Show processing animation
+                        document.getElementById('voice-status').textContent = 'FLASH AI: PROCESSING';
+                        this.processingAnimation();
+                        
+                        try {
+                            // Get AI response
+                            const response = await this.askFlash(transcript);
+                            
+                            // Update status
+                            document.getElementById('voice-status').textContent = 'FLASH AI: RESPONDING';
+                            
+                            // Speak with JARVIS voice
+                            this.speakResponse(response);
+                            
+                            // Trigger relevant animations
+                            this.triggerResponseAnimations(response);
+                            
+                            // Return to listening
+                            setTimeout(() => {
+                                document.getElementById('voice-status').textContent = 'FLASH AI: LISTENING';
+                            }, 1500);
+                            
+                        } catch (error) {
+                            console.error('Flash AI Error:', error);
+                            this.speakResponse("I apologize sir, I'm having trouble processing that request.");
+                            document.getElementById('voice-status').textContent = 'FLASH AI: ERROR';
+                            
+                            setTimeout(() => {
+                                document.getElementById('voice-status').textContent = 'FLASH AI: LISTENING';
+                            }, 2000);
+                        }
                     }
                     
-                    // If no command was executed and it's a question or statement, send to AI
-                    if (!commandExecuted && transcript.length > 5) {
-                        // Send to Flash AI directly
-                        this.askFlash(transcript).then(response => {
-                            this.speakResponse(response);
-                            this.triggerResponseAnimations(response);
-                        }).catch(error => {
-                            console.error('Error getting AI response:', error);
-                            this.speakResponse('Sorry, I encountered an error. Please try again.');
-                        });
+                    // Auto-sleep after 30 seconds of inactivity
+                    if (Date.now() - this.lastCommand > 30000) {
+                        this.isAwake = false;
                     }
                 }
             };
             
             this.voiceRecognition.onstart = () => {
-                document.getElementById('voice-status').textContent = 'FLASH AI: LISTENING';
+                document.getElementById('voice-status').textContent = 'FLASH AI: INITIALIZING';
                 document.querySelector('.voice-command').classList.add('voice-active');
+                
+                // Boot sequence
+                setTimeout(() => {
+                    this.speakResponse("Flash AI systems online. All systems operational.");
+                    document.getElementById('voice-status').textContent = 'FLASH AI: LISTENING';
+                    
+                    // Add ambient glow to UI
+                    this.scene.fog.color.setHex(0x001122);
+                    this.scene.fog.density = 0.01;
+                }, 1500);
             };
             
             this.voiceRecognition.onend = () => {
-                document.getElementById('voice-status').textContent = 'FLASH AI: READY';
-                document.querySelector('.voice-command').classList.remove('voice-active');
+                // Auto-restart for continuous listening
+                setTimeout(() => {
+                    try {
+                        this.voiceRecognition.start();
+                    } catch(e) {
+                        console.log('Restarting voice system...');
+                    }
+                }, 100);
             };
             
-            // Start listening
+            this.voiceRecognition.onerror = (event) => {
+                if (event.error !== 'no-speech') {
+                    console.log('Voice error:', event.error);
+                    document.getElementById('voice-status').textContent = 'FLASH AI: STANDBY';
+                }
+            };
+            
+            // Start listening after a brief delay
             setTimeout(() => {
                 try {
                     this.voiceRecognition.start();
                 } catch(e) {
                     console.log('Voice recognition not available');
                 }
-            }, 3000);
+            }, 2000);
         }
+    }
+    
+    // Add visual feedback methods
+    pulseEffect() {
+        // Pulse the neural indicator
+        const indicator = document.querySelector('.neural-indicator');
+        if (indicator) {
+            indicator.style.animation = 'pulse 0.5s ease-out';
+            setTimeout(() => {
+                indicator.style.animation = '';
+            }, 500);
+        }
+        
+        // Brighten particles
+        this.particles.forEach(particle => {
+            if (particle.material) {
+                particle.material.opacity = 1;
+                setTimeout(() => {
+                    particle.material.opacity = 0.6;
+                }, 500);
+            }
+        });
+    }
+    
+    processingAnimation() {
+        // Create ripple effect from center
+        const rippleCount = 3;
+        for (let i = 0; i < rippleCount; i++) {
+            setTimeout(() => {
+                this.createRipple();
+            }, i * 200);
+        }
+    }
+    
+    createRipple() {
+        const geometry = new THREE.RingGeometry(0.1, 0.2, 32);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.8,
+            side: THREE.DoubleSide
+        });
+        
+        const ripple = new THREE.Mesh(geometry, material);
+        ripple.position.set(0, 0, 0);
+        this.scene.add(ripple);
+        
+        // Animate ripple
+        const animate = () => {
+            ripple.scale.x += 0.5;
+            ripple.scale.y += 0.5;
+            material.opacity -= 0.02;
+            
+            if (material.opacity > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                this.scene.remove(ripple);
+            }
+        };
+        animate();
     }
     
     setupBiometrics() {
@@ -843,22 +976,71 @@ class QuantumEngine {
     
     speakResponse(text) {
         if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+            
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.1;
-            utterance.pitch = 1.0;
-            utterance.volume = 0.8;
             
-            // Try to use a more natural voice
+            // JARVIS-style voice settings
+            utterance.rate = 0.95; // Slightly slower for clarity
+            utterance.pitch = 0.85; // Lower pitch for masculine AI voice
+            utterance.volume = 0.9;
+            
+            // Try to find the best voice for JARVIS-like sound
             const voices = speechSynthesis.getVoices();
-            const preferredVoice = voices.find(voice => 
-                voice.name.includes('Samantha') || 
-                voice.name.includes('Alex') ||
-                voice.name.includes('Daniel')
-            );
             
-            if (preferredVoice) {
-                utterance.voice = preferredVoice;
+            // Preferred voices in order (British/UK voices sound more like JARVIS)
+            const preferredVoices = [
+                'Daniel', // British male voice on iOS
+                'Google UK English Male',
+                'Microsoft David',
+                'Alex', // macOS voice
+                'Google US English',
+                'Microsoft Mark'
+            ];
+            
+            let selectedVoice = null;
+            for (const preferred of preferredVoices) {
+                selectedVoice = voices.find(voice => 
+                    voice.name.includes(preferred) || 
+                    voice.voiceURI.includes(preferred)
+                );
+                if (selectedVoice) break;
             }
+            
+            // If no preferred voice found, try any UK/British voice
+            if (!selectedVoice) {
+                selectedVoice = voices.find(voice => 
+                    voice.lang.includes('en-GB') || 
+                    voice.name.includes('UK') ||
+                    voice.name.includes('British')
+                );
+            }
+            
+            // Fallback to any male voice
+            if (!selectedVoice) {
+                selectedVoice = voices.find(voice => 
+                    voice.name.toLowerCase().includes('male') &&
+                    !voice.name.toLowerCase().includes('female')
+                );
+            }
+            
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            
+            // Add visual feedback when speaking
+            utterance.onstart = () => {
+                document.getElementById('voice-status').textContent = 'FLASH AI: SPEAKING';
+                // Add speaking animation
+                this.scene.fog.density = 0.02;
+            };
+            
+            utterance.onend = () => {
+                document.getElementById('voice-status').textContent = 'FLASH AI: LISTENING';
+                // Reset visual state
+                this.scene.fog.density = 0.01;
+            };
             
             speechSynthesis.speak(utterance);
         }
