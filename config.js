@@ -5,7 +5,10 @@
 const GROQ_CONFIG = {
     // API key is loaded from localStorage for security
     // Use setup.html to configure your API key
-    apiKey: localStorage.getItem('GROQ_API_KEY') || 'YOUR_GROQ_API_KEY_HERE',
+    get apiKey() {
+        // Dynamically get API key when needed
+        return localStorage.getItem('GROQ_API_KEY') || 'YOUR_GROQ_API_KEY_HERE';
+    },
     apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
     model: 'mixtral-8x7b-32768', // Fast and cost-effective
     // Alternative models:

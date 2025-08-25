@@ -31,6 +31,21 @@ class QuantumEngine {
         this.isThinking = false;
         
         this.init();
+        
+        // Check API key after initialization
+        setTimeout(() => {
+            this.checkAPIKey();
+        }, 3000);
+    }
+    
+    checkAPIKey() {
+        const apiKey = localStorage.getItem('GROQ_API_KEY');
+        if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
+            console.warn('Flash AI: No API key found. Visit /setup.html to configure.');
+            document.getElementById('voice-status').textContent = 'FLASH AI: NEEDS API KEY';
+        } else {
+            console.log('Flash AI: API key loaded successfully');
+        }
     }
     
     init() {
