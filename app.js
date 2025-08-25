@@ -27,6 +27,10 @@ class QuantumEngine {
         this.gestureTracking = null;
         this.biometrics = { heartRate: 72, neuralActivity: 87 };
         
+        // Chat system
+        this.chatMessages = [];
+        this.isThinking = false;
+        
         this.init();
     }
     
@@ -41,6 +45,7 @@ class QuantumEngine {
         this.setupVoiceCommands();
         this.setupBiometrics();
         this.setupShaders();
+        this.setupChat();
         this.animate();
     }
     
@@ -655,20 +660,35 @@ class QuantumEngine {
             this.voiceRecognition.interimResults = true;
             
             this.voiceRecognition.onresult = (event) => {
-                const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                const result = event.results[event.results.length - 1];
+                const transcript = result[0].transcript;
+                const lowerTranscript = transcript.toLowerCase();
                 document.getElementById('voice-transcript').textContent = transcript;
                 
-                // Voice commands
-                if (transcript.includes('flash') || transcript.includes('analyze')) {
-                    this.initializeNeuralLink();
-                } else if (transcript.includes('portfolio') || transcript.includes('show deals')) {
-                    this.startRotation();
-                } else if (transcript.includes('stop')) {
-                    this.stopRotation();
-                } else if (transcript.includes('sectors') || transcript.includes('industries')) {
-                    this.changeColors();
-                } else if (transcript.includes('opportunities') || transcript.includes('hot deals')) {
-                    this.explodeParticles();
+                // If the result is final (not interim), process it
+                if (result.isFinal) {
+                    // Check for specific commands first
+                    let commandExecuted = false;
+                    
+                    if (lowerTranscript.includes('stop')) {
+                        this.stopRotation();
+                        commandExecuted = true;
+                    } else if (lowerTranscript.includes('rotate') || lowerTranscript.includes('spin')) {
+                        this.startRotation();
+                        commandExecuted = true;
+                    } else if (lowerTranscript.includes('explode') || lowerTranscript.includes('burst')) {
+                        this.explodeParticles();
+                        commandExecuted = true;
+                    } else if (lowerTranscript.includes('color') || lowerTranscript.includes('change')) {
+                        this.changeColors();
+                        commandExecuted = true;
+                    }
+                    
+                    // If no command was executed and it's a question or statement, send to AI
+                    if (!commandExecuted && transcript.length > 5) {
+                        // Send to Flash AI
+                        this.sendMessage(transcript);
+                    }
                 }
             };
             
@@ -772,6 +792,201 @@ class QuantumEngine {
         };
         
         drawUIEffects();
+    }
+    
+    setupChat() {
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatMinimize = document.querySelector('.chat-minimize');
+        const chatContainer = document.querySelector('.ai-chat-container');
+        
+        // Send message on button click
+        chatSend.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                this.sendMessage(message);
+                chatInput.value = '';
+            }
+        });
+        
+        // Send message on Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const message = chatInput.value.trim();
+                if (message) {
+                    this.sendMessage(message);
+                    chatInput.value = '';
+                }
+            }
+        });
+        
+        // Minimize/maximize chat
+        chatMinimize.addEventListener('click', () => {
+            chatContainer.classList.toggle('minimized');
+            chatMinimize.textContent = chatContainer.classList.contains('minimized') ? '+' : '−';
+        });
+    }
+    
+    async sendMessage(message) {
+        // Add user message to chat
+        this.addChatMessage(message, 'user');
+        
+        // Show thinking indicator
+        this.showThinking();
+        
+        try {
+            // Call Groq API
+            const response = await this.askFlash(message);
+            
+            // Remove thinking indicator
+            this.hideThinking();
+            
+            // Add AI response
+            this.addChatMessage(response, 'ai');
+            
+            // Speak the response
+            this.speakResponse(response);
+            
+            // Trigger animations based on response
+            this.triggerResponseAnimations(response);
+            
+        } catch (error) {
+            console.error('Error calling Groq:', error);
+            this.hideThinking();
+            this.addChatMessage('Sorry, I encountered an error. Please try again.', 'ai');
+        }
+    }
+    
+    async askFlash(question) {
+        // Check if API key is set
+        if (!GROQ_CONFIG.apiKey || GROQ_CONFIG.apiKey === 'YOUR_GROQ_API_KEY_HERE') {
+            return "Please set your Groq API key in config.js to enable AI responses.";
+        }
+        
+        const response = await fetch(GROQ_CONFIG.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${GROQ_CONFIG.apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: GROQ_CONFIG.model,
+                messages: [
+                    {
+                        role: "system",
+                        content: FLASH_SYSTEM_PROMPT
+                    },
+                    ...this.chatMessages.map(msg => ({
+                        role: msg.type === 'user' ? 'user' : 'assistant',
+                        content: msg.text
+                    })),
+                    {
+                        role: "user",
+                        content: question
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 500,
+                stream: false
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.choices[0].message.content;
+    }
+    
+    addChatMessage(text, type) {
+        const chatMessagesEl = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${type}-message`;
+        
+        const label = document.createElement('span');
+        label.className = 'message-label';
+        label.textContent = type === 'user' ? 'You' : 'Flash AI';
+        
+        const content = document.createElement('p');
+        content.textContent = text;
+        
+        messageDiv.appendChild(label);
+        messageDiv.appendChild(content);
+        chatMessagesEl.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        
+        // Add to message history
+        this.chatMessages.push({ type, text });
+    }
+    
+    showThinking() {
+        const chatMessagesEl = document.getElementById('chat-messages');
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'chat-message ai-message thinking-message';
+        thinkingDiv.innerHTML = `
+            <span class="message-label">Flash AI</span>
+            <div class="thinking-indicator">
+                <div class="thinking-dot"></div>
+                <div class="thinking-dot"></div>
+                <div class="thinking-dot"></div>
+            </div>
+        `;
+        chatMessagesEl.appendChild(thinkingDiv);
+        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+    
+    hideThinking() {
+        const thinkingMessage = document.querySelector('.thinking-message');
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+    }
+    
+    speakResponse(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.1;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.8;
+            
+            // Try to use a more natural voice
+            const voices = speechSynthesis.getVoices();
+            const preferredVoice = voices.find(voice => 
+                voice.name.includes('Samantha') || 
+                voice.name.includes('Alex') ||
+                voice.name.includes('Daniel')
+            );
+            
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+            
+            speechSynthesis.speak(utterance);
+        }
+    }
+    
+    triggerResponseAnimations(response) {
+        const lowerResponse = response.toLowerCase();
+        
+        // Trigger animations based on keywords in response
+        if (lowerResponse.includes('opportunity') || lowerResponse.includes('potential')) {
+            this.explodeParticles();
+        } else if (lowerResponse.includes('risk') || lowerResponse.includes('caution')) {
+            this.changeColors();
+        } else if (lowerResponse.includes('growth') || lowerResponse.includes('scale')) {
+            this.startRotation();
+        }
+        
+        // Flash the AI confidence when giving advice
+        if (lowerResponse.includes('recommend') || lowerResponse.includes('suggest')) {
+            this.biometrics.neuralActivity = 95;
+            setTimeout(() => {
+                this.biometrics.neuralActivity = 87;
+            }, 2000);
+        }
     }
     
     initializeNeuralLink() {
