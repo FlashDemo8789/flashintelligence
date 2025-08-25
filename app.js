@@ -651,7 +651,11 @@ class QuantumEngine {
     }
     
     setupVoiceCommands() {
+        console.log('Flash AI: Setting up voice commands...');
+        
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            console.log('Flash AI: Voice recognition API available');
+            
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             this.voiceRecognition = new SpeechRecognition();
             this.voiceRecognition.continuous = true;
@@ -660,6 +664,8 @@ class QuantumEngine {
             // JARVIS-style state tracking
             this.isAwake = false;
             this.lastCommand = Date.now();
+            
+            console.log('Flash AI: Voice recognition configured');
             
             this.voiceRecognition.onresult = async (event) => {
                 const result = event.results[event.results.length - 1];
@@ -782,11 +788,16 @@ class QuantumEngine {
             // Start listening after a brief delay
             setTimeout(() => {
                 try {
+                    console.log('Flash AI: Starting voice recognition...');
                     this.voiceRecognition.start();
                 } catch(e) {
-                    console.log('Voice recognition not available');
+                    console.error('Flash AI: Voice recognition error:', e);
+                    document.getElementById('voice-status').textContent = 'FLASH AI: MIC ACCESS NEEDED';
                 }
             }, 2000);
+        } else {
+            console.error('Flash AI: Voice recognition not supported in this browser');
+            document.getElementById('voice-status').textContent = 'FLASH AI: NOT SUPPORTED';
         }
     }
     
@@ -934,9 +945,15 @@ class QuantumEngine {
     
     
     async askFlash(question) {
+        console.log('Flash AI: Processing question:', question);
+        
         // Check if API key is set
-        if (!GROQ_CONFIG.apiKey || GROQ_CONFIG.apiKey === 'YOUR_GROQ_API_KEY_HERE') {
-            return "Please set your Groq API key in config.js to enable AI responses.";
+        const apiKey = GROQ_CONFIG.apiKey;
+        console.log('Flash AI: API key status:', apiKey ? 'Set' : 'Not set');
+        
+        if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
+            console.error('Flash AI: No API key found');
+            return "I need an API key to function. Please visit the setup page to configure.";
         }
         
         const response = await fetch(GROQ_CONFIG.apiUrl, {
