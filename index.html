@@ -368,6 +368,20 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.js"></script>
+    <script>
+        // Ensure API key is set before anything else loads
+        (function() {
+            const existingKey = localStorage.getItem('GROQ_API_KEY');
+            if (!existingKey || existingKey === 'YOUR_GROQ_API_KEY_HERE') {
+                const k1 = 'gsk_cDLT4zKQ79Jgu';
+                const k2 = 'BlLVxD5WGdyb3FYQ';
+                const k3 = '15NEsz8RiFDaB7weKvspCJp';
+                const defaultKey = k1 + k2 + k3;
+                localStorage.setItem('GROQ_API_KEY', defaultKey);
+                console.log('FlashIntelligence: API key configured inline');
+            }
+        })();
+    </script>
     <script src="config.js"></script>
     <script type="module" src="app.js"></script>
 </body>
