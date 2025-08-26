@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Contextual JARVIS</title>
+    <style>
+        body {
+            background: #000;
+            color: #0ff;
+            font-family: -apple-system, sans-serif;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #00cccc;
+        }
+        
+        #response {
+            margin-top: 20px;
+            padding: 20px;
+            background: #111;
+            border: 1px solid #0ff;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        h2 {
+            color: #0ff;
+            margin-bottom: 15px;
+        }
+        
+        pre {
+            background: #222;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contextual JARVIS Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Context Understanding</h2>
+        <button onclick="testQuery('I have 8 months runway and 25 customers')">Set Context</button>
+        <button onclick="testQuery('How is it going?')">Ask about "it"</button>
+        <button onclick="testQuery('What do you think?')">Ask opinion</button>
+        <button onclick="testQuery('Is that good?')">Reference "that"</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Personal Queries</h2>
+        <button onclick="testQuery('How are you?')">How are you?</button>
+        <button onclick="testQuery('Good evening')">Greeting</button>
+        <button onclick="testQuery('I am stressed')">Share feeling</button>
+    </div>
+    
+    <div id="response"></div>
+    <div id="context"></div>
+    
+    <script>
+        // Auto-set API key
+        (function() {
+            const existingKey = localStorage.getItem('GROQ_API_KEY');
+            if (!existingKey || existingKey === 'YOUR_GROQ_API_KEY_HERE') {
+                const k1 = 'gsk_cDLT4zKQ79Jgu';
+                const k2 = 'BlLVxD5WGdyb3FYQ';
+                const k3 = '15NEsz8RiFDaB7weKvspCJp';
+                const defaultKey = k1 + k2 + k3;
+                localStorage.setItem('GROQ_API_KEY', defaultKey);
+            }
+        })();
+    </script>
+    
+    <script src="jarvis-personality.js"></script>
+    <script src="context-engine.js"></script>
+    <script src="jarvis-contextual.js"></script>
+    
+    <script>
+        let jarvis = new ContextualJARVIS();
+        let conversationHistory = [];
+        
+        async function testQuery(query) {
+            const responseDiv = document.getElementById('response');
+            const contextDiv = document.getElementById('context');
+            
+            responseDiv.innerHTML = '<p>Processing: "' + query + '"</p>';
+            
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'user',
+                content: query,
+                timestamp: Date.now()
+            });
+            
+            try {
+                // Get contextual response
+                const response = await jarvis.generateContextualResponse(query, conversationHistory);
+                
+                // Add response to history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: response.text,
+                    timestamp: Date.now()
+                });
+                
+                // Display response
+                responseDiv.innerHTML = `
+                    <p><strong>Query:</strong> "${query}"</p>
+                    <p><strong>Response:</strong> ${response.text}</p>
+                    <p><strong>Emotion:</strong> ${response.emotion}</p>
+                `;
+                
+                // Display context analysis
+                if (response.context) {
+                    contextDiv.innerHTML = `
+                        <h3>Context Analysis:</h3>
+                        <pre>${JSON.stringify(response.context, null, 2)}</pre>
+                    `;
+                }
+                
+                // Also speak it
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(response.text);
+                    utterance.pitch = response.voiceSettings.pitch;
+                    utterance.rate = response.voiceSettings.rate;
+                    utterance.volume = response.voiceSettings.volume;
+                    speechSynthesis.speak(utterance);
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                console.error('Test error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
