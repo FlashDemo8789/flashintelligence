@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash CAMP Framework</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fff;
+            color: #000;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 120px 120px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page {
+            position: relative;
+            z-index: 10;
+            padding: 80px min(12vw, 120px) 160px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .label {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.5);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.9);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .hero {
+            display: grid;
+            gap: 28px;
+            margin-bottom: 120px;
+        }
+
+        .hero-title {
+            font-size: clamp(56px, 12vw, 120px);
+            font-weight: 100;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        .hero-copy {
+            max-width: 640px;
+            font-size: 18px;
+            line-height: 1.7;
+            color: rgba(0,0,0,0.6);
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(0,0,0,0.08);
+            margin: 120px 0;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 200;
+            letter-spacing: -0.01em;
+        }
+
+        .section-heading p {
+            max-width: 560px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(0,0,0,0.58);
+        }
+
+        .pillar-grid {
+            display: grid;
+            gap: 28px;
+        }
+
+        @media (min-width: 900px) {
+            .pillar-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        .pillar-card {
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 20px;
+            padding: 32px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04));
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            min-height: 240px;
+        }
+
+        .pillar-card span {
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.45);
+        }
+
+        .pillar-card h3 {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .pillar-card p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(0,0,0,0.58);
+        }
+
+        .metrics-panel {
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 24px;
+            padding: 40px;
+            background: rgba(0,0,0,0.02);
+            display: grid;
+            gap: 32px;
+        }
+
+        .metrics-panel header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stage-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stage-chip {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,0.15);
+            background: transparent;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.55);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .stage-chip.active {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .stage-body {
+            display: grid;
+            gap: 20px;
+        }
+
+        .stage-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stage-row span:first-child {
+            width: 80px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.45);
+        }
+
+        .stage-bar {
+            flex: 1;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .stage-fill {
+            height: 100%;
+            background: #000;
+            width: 0;
+            transition: width 0.4s ease;
+        }
+
+        .stage-value {
+            min-width: 52px;
+            text-align: right;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+        }
+
+        .score-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        @media (min-width: 900px) {
+            .score-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        .score-card {
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.02);
+            display: grid;
+            gap: 12px;
+        }
+
+        .score-label {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .score-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(0,0,0,0.6);
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        @media (min-width: 1000px) {
+            .data-grid {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .radar-shell {
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 24px;
+            padding: 48px;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .radar-canvas {
+            width: 100%;
+            aspect-ratio: 1;
+            display: block;
+        }
+
+        .insight-list {
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 24px;
+            padding: 32px;
+            background: rgba(0,0,0,0.02);
+            display: grid;
+            gap: 24px;
+        }
+
+        .insight-item {
+            display: grid;
+            gap: 6px;
+        }
+
+        .insight-item span {
+            font-size: 12px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.5);
+        }
+
+        .insight-item p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(0,0,0,0.65);
+        }
+
+        footer {
+            margin-top: 140px;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                padding: 60px 24px 120px;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .hero-copy {
+                font-size: 16px;
+            }
+
+            .metrics-panel {
+                padding: 28px;
+            }
+
+            .stage-row {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .stage-row span:first-child {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="page">
+        <header>
+            <div class="label">Flash Intelligence System</div>
+            <a class="back-link" href="index.html">Back to Intelligence</a>
+        </header>
+
+        <section class="hero">
+            <h1 class="hero-title">CAMP</h1>
+            <p class="hero-copy">Capital, Advantage, Market, and People are the lenses our intelligence engine uses to read a startup. The framework was trained on 50,000+ funding outcomes so founders get a precise map of what investors will see—before the meeting.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section>
+            <div class="section-heading">
+                <div class="label">The Four Pillars</div>
+                <h2>The same structure we use to underwrite every company.</h2>
+                <p>Each pillar is a distinct signal path. Weighting shifts by stage, but the combination reveals whether your company will endure investor diligence.</p>
+            </div>
+            <div class="pillar-grid">
+                <article class="pillar-card">
+                    <span>Capital</span>
+                    <h3>Financial discipline &amp; durability</h3>
+                    <p>We examine burn multiples, runway, investor quality, and capital structure to understand how efficiently you turn money into momentum.</p>
+                </article>
+                <article class="pillar-card">
+                    <span>Advantage</span>
+                    <h3>Defensible, compounding edge</h3>
+                    <p>Proprietary tech, data moats, switching costs, and network effects signal whether your lead intensifies as you scale.</p>
+                </article>
+                <article class="pillar-card">
+                    <span>Market</span>
+                    <h3>Scale, urgency, and pull</h3>
+                    <p>We map TAM, velocity, retention, and segment urgency to ensure you are building where venture outcomes are actually possible.</p>
+                </article>
+                <article class="pillar-card">
+                    <span>People</span>
+                    <h3>Execution gravity &amp; rate</h3>
+                    <p>Founder-market fit, operating cadence, and hiring magnetism tell us how quickly insight becomes shipped product.</p>
+                </article>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section>
+            <div class="section-heading">
+                <div class="label">Stage Intelligence</div>
+                <h2>Weighting adapts as you mature.</h2>
+                <p>Select your stage to see how CAMP redistributes attention. Early on we weight people and advantage; by Series B, capital efficiency takes the lead.</p>
+            </div>
+            <div class="metrics-panel">
+                <header>
+                    <div class="label" id="stage-label">Pre-Seed Focus</div>
+                    <div class="stage-controls" role="tablist" aria-label="CAMP stage weighting">
+                        <button class="stage-chip active" data-stage="preseed" role="tab" aria-selected="true">Pre-Seed</button>
+                        <button class="stage-chip" data-stage="seed" role="tab" aria-selected="false">Seed</button>
+                        <button class="stage-chip" data-stage="seriesa" role="tab" aria-selected="false">Series A</button>
+                        <button class="stage-chip" data-stage="seriesb" role="tab" aria-selected="false">Series B+</button>
+                    </div>
+                </header>
+                <div class="stage-body" aria-live="polite">
+                    <div class="stage-row">
+                        <span>Capital</span>
+                        <div class="stage-bar"><div class="stage-fill" id="fill-capital"></div></div>
+                        <div class="stage-value" id="value-capital">10%</div>
+                    </div>
+                    <div class="stage-row">
+                        <span>Advantage</span>
+                        <div class="stage-bar"><div class="stage-fill" id="fill-advantage"></div></div>
+                        <div class="stage-value" id="value-advantage">30%</div>
+                    </div>
+                    <div class="stage-row">
+                        <span>Market</span>
+                        <div class="stage-bar"><div class="stage-fill" id="fill-market"></div></div>
+                        <div class="stage-value" id="value-market">20%</div>
+                    </div>
+                    <div class="stage-row">
+                        <span>People</span>
+                        <div class="stage-bar"><div class="stage-fill" id="fill-people"></div></div>
+                        <div class="stage-value" id="value-people">40%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section>
+            <div class="section-heading">
+                <div class="label">Score Signals</div>
+                <h2>Interpret your fundability score with precision.</h2>
+            </div>
+            <div class="score-grid">
+                <article class="score-card">
+                    <div class="score-label">75+</div>
+                    <p>Investment ready. You track the patterns that lead to term sheets. Expect partner interviews and swift moves to paper.</p>
+                </article>
+                <article class="score-card">
+                    <div class="score-label">60-74</div>
+                    <p>Promising territory. Close the gaps CAMP highlights before spending relationship capital on meetings.</p>
+                </article>
+                <article class="score-card">
+                    <div class="score-label">45-59</div>
+                    <p>Mixed signals. Investors will stall unless you move key metrics—CAMP lists the order of operations.</p>
+                </article>
+                <article class="score-card">
+                    <div class="score-label">&lt;45</div>
+                    <p>Foundational work ahead. Focus on traction proof points before returning to the market.</p>
+                </article>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section>
+            <div class="section-heading">
+                <div class="label">Pattern Intelligence</div>
+                <h2>How founders use CAMP inside Flash.</h2>
+            </div>
+            <div class="data-grid">
+                <div class="radar-shell">
+                    <canvas id="radarCanvas" class="radar-canvas" aria-hidden="true"></canvas>
+                </div>
+                <div class="insight-list">
+                    <div class="insight-item">
+                        <span>Rapid Iteration</span>
+                        <p>Top quartile founders re-run CAMP every 14 days to track progress and unlock higher score thresholds.</p>
+                    </div>
+                    <div class="insight-item">
+                        <span>Portfolio Edge</span>
+                        <p>Companies lifted fundability by an average of 18 points before raising their next round with us.</p>
+                    </div>
+                    <div class="insight-item">
+                        <span>Feedback Loop</span>
+                        <p>Each score delivers five specific reasons investors would pass today and the playbook to change the answer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>© 2025 Flash. All rights reserved.</footer>
+    </div>
+
+    <script>
+        const stageData = {
+            preseed: {
+                label: 'Pre-Seed Focus',
+                weights: { capital: 10, advantage: 30, market: 20, people: 40 }
+            },
+            seed: {
+                label: 'Seed Focus',
+                weights: { capital: 15, advantage: 30, market: 25, people: 30 }
+            },
+            seriesa: {
+                label: 'Series A Focus',
+                weights: { capital: 25, advantage: 25, market: 30, people: 20 }
+            },
+            seriesb: {
+                label: 'Series B+ Focus',
+                weights: { capital: 35, advantage: 20, market: 30, people: 15 }
+            }
+        };
+
+        const chips = Array.from(document.querySelectorAll('.stage-chip'));
+        const stageLabel = document.getElementById('stage-label');
+        const fills = {
+            capital: document.getElementById('fill-capital'),
+            advantage: document.getElementById('fill-advantage'),
+            market: document.getElementById('fill-market'),
+            people: document.getElementById('fill-people')
+        };
+        const values = {
+            capital: document.getElementById('value-capital'),
+            advantage: document.getElementById('value-advantage'),
+            market: document.getElementById('value-market'),
+            people: document.getElementById('value-people')
+        };
+
+        function setStage(key) {
+            const stage = stageData[key];
+            if (!stage) return;
+            stageLabel.textContent = stage.label;
+            Object.entries(stage.weights).forEach(([pillar, weight]) => {
+                if (fills[pillar]) {
+                    fills[pillar].style.width = weight + '%';
+                }
+                if (values[pillar]) {
+                    values[pillar].textContent = weight + '%';
+                }
+            });
+            chips.forEach(chip => {
+                const isActive = chip.dataset.stage === key;
+                chip.classList.toggle('active', isActive);
+                chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+        }
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => setStage(chip.dataset.stage));
+            chip.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setStage(chip.dataset.stage);
+                }
+            });
+        });
+
+        setStage('preseed');
+
+        const canvas = document.getElementById('radarCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const size = canvas.clientWidth;
+            canvas.width = size;
+            canvas.height = size;
+            drawRadar();
+        }
+
+        function drawRadar() {
+            const size = canvas.width;
+            const center = size / 2;
+            const radius = size * 0.38;
+            const axes = ['Capital', 'Advantage', 'Market', 'People'];
+            const data = [0.62, 0.78, 0.54, 0.70];
+
+            ctx.clearRect(0, 0, size, size);
+            ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i < axes.length; i++) {
+                const angle = (Math.PI * 2 / axes.length) * i - Math.PI / 2;
+                const x = center + Math.cos(angle) * radius;
+                const y = center + Math.sin(angle) * radius;
+                ctx.moveTo(center, center);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0,0,0,0.16)';
+            ctx.fillStyle = 'rgba(0,0,0,0.05)';
+            data.forEach((value, index) => {
+                const angle = (Math.PI * 2 / data.length) * index - Math.PI / 2;
+                const x = center + Math.cos(angle) * radius * value;
+                const y = center + Math.sin(angle) * radius * value;
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>
