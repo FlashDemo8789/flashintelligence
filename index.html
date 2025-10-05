@@ -329,7 +329,7 @@
             transition: height 2s ease;
         }
 
-        /* CAMP Overlay */
+        /* CAMP Access */
         .camp-tab {
             position: fixed;
             bottom: 40px;
@@ -343,16 +343,16 @@
             font-size: 11px;
             font-weight: 500;
             color: #fff;
-            cursor: pointer;
+            text-decoration: none;
             z-index: 450;
             box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
-            transition: background 0.3s ease, color 0.3s ease, right 0.4s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .camp-tab:hover {
             background: rgba(0, 0, 0, 0.85);
             color: #fff;
-            box-shadow: 0 24px 36px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 24px 36px rgba(0, 0, 0, 0.18);
         }
 
         .camp-tab:focus-visible {
@@ -360,184 +360,11 @@
             outline-offset: 2px;
         }
 
-        .camp-tab.active {
-            right: 480px;
-            background: #000;
-            color: #fff;
-        }
-
-        .camp-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: min(420px, 92vw);
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.97);
-            border-left: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: -20px 0 40px rgba(0, 0, 0, 0.08);
-            transform: translateX(100%);
-            transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
-            z-index: 440;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .camp-overlay.active {
-            transform: translateX(0);
-        }
-
-        .camp-overlay-inner {
-            flex: 1;
-            padding: 48px 40px;
-            overflow-y: auto;
-        }
-
-        .camp-overlay .overlay-tag {
-            font-size: 11px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: rgba(0, 0, 0, 0.45);
-            margin-bottom: 16px;
-            display: inline-block;
-        }
-
-        .camp-overlay h2 {
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: -0.01em;
-            margin-bottom: 16px;
-        }
-
-        .camp-overlay p {
-            font-size: 15px;
-            line-height: 1.7;
-            color: rgba(0, 0, 0, 0.6);
-        }
-
-        .camp-overlay header p {
-            margin-bottom: 32px;
-        }
-
-        .camp-overlay-close {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 999px;
-            background: transparent;
-            color: rgba(0, 0, 0, 0.6);
-            font-size: 11px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            padding: 8px 18px;
-            cursor: pointer;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        .camp-overlay-close:hover {
-            background: rgba(0, 0, 0, 0.1);
-            color: #000;
-        }
-
-        .camp-pillars {
-            display: grid;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .camp-pillars article {
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .camp-pillars h3 {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .camp-pillars span {
-            display: inline-block;
-            font-size: 11px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: rgba(0, 0, 0, 0.45);
-            margin-bottom: 8px;
-        }
-
-        .camp-stage-summary {
-            margin-bottom: 32px;
-        }
-
-        .camp-stage-summary h4,
-        .camp-score-summary h4 {
-            font-size: 15px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: rgba(0, 0, 0, 0.5);
-            margin-bottom: 12px;
-        }
-
-        .stage-row,
-        .score-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-size: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .stage-row:last-child,
-        .score-row:last-child {
-            border-bottom: none;
-        }
-
-        .stage-row strong,
-        .score-row strong {
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-
-        .camp-overlay-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 24px;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: #000;
-        }
-
-        .camp-overlay-cta span {
-            transition: transform 0.3s ease;
-        }
-
-        .camp-overlay-cta:hover span {
-            transform: translateX(4px);
-        }
-
         @media (max-width: 900px) {
             .camp-tab {
                 right: 24px;
                 bottom: 24px;
                 padding: 12px 26px;
-            }
-
-            .camp-tab.active {
-                right: 24px;
-            }
-
-            .camp-overlay {
-                width: 100vw;
-            }
-
-            .camp-overlay-inner {
-                padding: 40px 24px 60px;
             }
         }
 
@@ -1670,100 +1497,6 @@
     </script>
     </div><!-- End Desktop-Only Content -->
 
-    <button class="camp-tab" id="campTab" type="button" aria-expanded="false">CAMP</button>
-    <aside class="camp-overlay" id="campOverlay" aria-hidden="true">
-        <div class="camp-overlay-inner">
-            <header>
-                <span class="overlay-tag">Flash Intelligence System</span>
-                <h2>Inside the CAMP Framework</h2>
-                <p>CAMP is the four-lens system our intelligence engine uses to turn founder inputs into conviction. Every company we fund is scored on Capital, Advantage, Market, and People before a partner ever joins the call.</p>
-                <button class="camp-overlay-close" id="campClose" type="button">Close</button>
-            </header>
-
-            <section class="camp-pillars">
-                <article>
-                    <span>C</span>
-                    <h3>Capital — financial discipline</h3>
-                    <p>We read burn, runway, investor quality, and capital structure to understand how every dollar compounds progress.</p>
-                </article>
-                <article>
-                    <span>A</span>
-                    <h3>Advantage — defensible edge</h3>
-                    <p>Moats, proprietary data, switching costs, and product depth reveal whether your lead strengthens as you scale.</p>
-                </article>
-                <article>
-                    <span>M</span>
-                    <h3>Market — scale and timing</h3>
-                    <p>TAM, velocity, and real traction signals show if the problem space is big and urgent enough for venture outcomes.</p>
-                </article>
-                <article>
-                    <span>P</span>
-                    <h3>People — execution gravity</h3>
-                    <p>Founder-market fit, operating cadence, and hiring gravity tell us how quickly insight becomes shipped product.</p>
-                </article>
-            </section>
-
-            <section class="camp-stage-summary">
-                <h4>Stage weighting</h4>
-                <div class="stage-row"><strong>Pre-Seed</strong><span>People 40% | Advantage 30% | Market 20% | Capital 10%</span></div>
-                <div class="stage-row"><strong>Seed</strong><span>People 30% | Advantage 30% | Market 25% | Capital 15%</span></div>
-                <div class="stage-row"><strong>Series A</strong><span>Market 30% | Capital 25% | Advantage 25% | People 20%</span></div>
-                <div class="stage-row"><strong>Series B+</strong><span>Capital 35% | Market 30% | Advantage 20% | People 15%</span></div>
-            </section>
-
-            <section class="camp-score-summary">
-                <h4>Score signals</h4>
-                <div class="score-row"><strong>75+</strong><span>Investment ready — expect partner call and terms.</span></div>
-                <div class="score-row"><strong>60-74</strong><span>Promising — close the flagged gaps before outreach.</span></div>
-                <div class="score-row"><strong>45-59</strong><span>Mixed signals — investors will hesitate without progress.</span></div>
-                <div class="score-row"><strong>&lt;45</strong><span>Early fundamentals — build proof before fundraising.</span></div>
-            </section>
-
-            <p>CAMP feedback ships with the five reasons investors would pass today, the fixes that move the score, and the investor profile that fits once you cross the threshold.</p>
-            <a class="camp-overlay-cta" href="https://flashintelligence.co" rel="noopener">See your analysis<span>→</span></a>
-        </div>
-    </aside>
-
-    <script>
-        (function() {
-            const tab = document.getElementById('campTab');
-            const overlay = document.getElementById('campOverlay');
-            const close = document.getElementById('campClose');
-
-            if (!tab || !overlay || !close) {
-                return;
-            }
-
-            function openOverlay() {
-                overlay.classList.add('active');
-                tab.classList.add('active');
-                tab.setAttribute('aria-expanded', 'true');
-                overlay.setAttribute('aria-hidden', 'false');
-            }
-
-            function closeOverlay() {
-                overlay.classList.remove('active');
-                tab.classList.remove('active');
-                tab.setAttribute('aria-expanded', 'false');
-                overlay.setAttribute('aria-hidden', 'true');
-            }
-
-            tab.addEventListener('click', () => {
-                if (overlay.classList.contains('active')) {
-                    closeOverlay();
-                } else {
-                    openOverlay();
-                }
-            });
-
-            close.addEventListener('click', closeOverlay);
-
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && overlay.classList.contains('active')) {
-                    closeOverlay();
-                }
-            });
-        })();
-    </script>
+    <a class="camp-tab" href="camp.html" rel="noopener">CAMP</a>
 </body>
 </html><!-- Force rebuild Mon Aug 18 09:10:18 JST 2025 -->
