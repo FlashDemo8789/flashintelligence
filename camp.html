@@ -14,32 +14,29 @@
         }
 
         :root {
-            --bg: #f4f6f9;
+            --bg: #f6f7f9;
             --ink: #050607;
             --muted: rgba(5, 6, 7, 0.52);
-            --glass: rgba(255, 255, 255, 0.72);
             --line: rgba(5, 6, 7, 0.08);
-            --radius-lg: 36px;
+            --glass: rgba(255, 255, 255, 0.82);
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9), transparent 55%),
-                        radial-gradient(circle at 88% 0%, rgba(176,198,255,0.25), transparent 42%),
+            background: radial-gradient(circle at 20% 12%, rgba(255,255,255,0.8), transparent 55%),
+                        radial-gradient(circle at 82% -8%, rgba(183,202,255,0.25), transparent 45%),
                         var(--bg);
             color: var(--ink);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        a {
-            color: inherit;
-        }
+        a { color: inherit; }
 
-        .wrap {
-            width: min(1100px, 92vw);
+        .frame {
+            width: min(1040px, 92vw);
             margin: 0 auto;
-            padding: 72px 0 140px;
+            padding: 72px 0 120px;
         }
 
         header {
@@ -49,7 +46,7 @@
             margin-bottom: 80px;
         }
 
-        .label {
+        .tag {
             font-size: 11px;
             letter-spacing: 0.24em;
             text-transform: uppercase;
@@ -59,16 +56,15 @@
         .back {
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 26px;
+            gap: 12px;
+            padding: 12px 22px;
             border-radius: 999px;
             border: 1px solid var(--line);
-            background: rgba(255,255,255,0.78);
-            backdrop-filter: blur(10px);
-            font-size: 12px;
-            letter-spacing: 0.22em;
+            background: rgba(255,255,255,0.9);
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            transition: transform 0.35s ease, background 0.35s ease, color 0.35s ease;
+            font-size: 12px;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .back:hover {
@@ -79,39 +75,39 @@
 
         .hero {
             display: grid;
-            gap: clamp(32px, 6vw, 48px);
-            align-items: start;
+            gap: clamp(28px, 6vw, 48px);
         }
 
-        @media (min-width: 960px) {
+        @media (min-width: 940px) {
             .hero {
-                grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.7fr);
+                grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.55fr);
+                align-items: start;
             }
         }
 
         .hero h1 {
-            font-size: clamp(56px, 12vw, 120px);
-            letter-spacing: 0.28em;
+            font-size: clamp(58px, 12vw, 124px);
+            letter-spacing: 0.3em;
             font-weight: 100;
             line-height: 0.9;
             text-transform: uppercase;
         }
 
         .hero p {
-            margin-top: 24px;
+            margin-top: 28px;
             font-size: 18px;
             line-height: 1.65;
             color: var(--muted);
-            max-width: 520px;
+            max-width: 560px;
         }
 
-        .metrics {
-            margin-top: 32px;
+        .hero-metrics {
+            margin-top: 36px;
             display: grid;
             gap: 18px;
         }
 
-        .metric {
+        .hero-metric {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
@@ -119,81 +115,43 @@
             padding-bottom: 12px;
         }
 
-        .metric span {
+        .hero-metric span {
             font-size: 12px;
             letter-spacing: 0.22em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
-        .metric strong {
+        .hero-metric strong {
             font-weight: 300;
             font-size: 22px;
         }
 
-        .hero-visual {
-            position: relative;
-            width: clamp(200px, 30vw, 240px);
-            aspect-ratio: 1;
-            margin: 0 auto;
-            display: grid;
-            place-items: center;
-            border-radius: 32px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(235,240,255,0.7));
+        .hero-panel {
+            border-radius: 28px;
             border: 1px solid rgba(5,6,7,0.05);
-            box-shadow: 0 40px 60px rgba(5,6,7,0.12);
-            overflow: hidden;
-        }
-
-        .hero-visual::before,
-        .hero-visual::after {
-            content: '';
-            position: absolute;
-            inset: 18%;
-            border-radius: 50%;
-            border: 1px solid rgba(5,6,7,0.08);
-            opacity: 0.7;
-        }
-
-        .hero-visual::after {
-            inset: 32%;
-            opacity: 0.4;
-        }
-
-        .hero-sphere {
-            width: 68%;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.7) 45%, rgba(5,6,7,0.05) 78%);
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            padding: 40px;
             display: grid;
-            place-items: center;
+            gap: 18px;
             text-align: center;
-            gap: 8px;
-            box-shadow: inset 0 -18px 28px rgba(5,6,7,0.05);
+            box-shadow: 0 36px 48px rgba(5,6,7,0.12);
         }
 
-        .hero-sphere span {
-            font-size: 11px;
-            letter-spacing: 0.32em;
-            text-transform: uppercase;
-            color: rgba(5,6,7,0.45);
-        }
-
-        .hero-sphere strong {
-            font-size: 36px;
+        .hero-panel strong {
+            font-size: 42px;
             font-weight: 200;
-            letter-spacing: 0.32em;
+            letter-spacing: 0.28em;
         }
 
-        section {
-            margin-top: 140px;
-        }
+        section { margin-top: 120px; }
 
         .section-head {
+            margin-bottom: 44px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            margin-bottom: 48px;
+            gap: 16px;
         }
 
         .section-title {
@@ -204,92 +162,81 @@
 
         .section-copy {
             font-size: 16px;
-            line-height: 1.8;
+            line-height: 1.75;
             color: var(--muted);
-            max-width: 560px;
+            max-width: 540px;
         }
 
-        .pillar-panel {
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(14px);
+            padding: 44px;
+        }
+
+        .pillar-grid {
             display: grid;
-            gap: 26px;
+            gap: 28px;
         }
 
-        @media (min-width: 1020px) {
-            .pillar-panel {
+        @media (min-width: 960px) {
+            .pillar-grid {
                 grid-template-columns: 260px 1fr;
-                gap: 44px;
+                gap: 40px;
             }
         }
 
-        .pillar-menu {
+        .pillar-list {
             display: grid;
             gap: 14px;
         }
 
         .pillar-btn {
             border: 1px solid var(--line);
-            border-radius: 24px;
-            padding: 20px 24px;
+            border-radius: 20px;
+            padding: 18px 20px;
             text-align: left;
-            background: rgba(255,255,255,0.78);
-            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.85);
             cursor: pointer;
-            transition: transform 0.35s ease, border 0.35s ease, background 0.35s ease;
+            transition: transform 0.3s ease, border 0.3s ease, background 0.3s ease;
         }
 
-        .pillar-btn strong {
-            display: block;
-            font-size: 18px;
-            font-weight: 500;
-        }
+        .pillar-btn strong { font-size: 18px; font-weight: 500; }
 
         .pillar-btn span {
-            margin-top: 4px;
+            display: block;
+            margin-top: 6px;
             font-size: 11px;
-            letter-spacing: 0.28em;
+            letter-spacing: 0.26em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
         .pillar-btn.active {
-            border-color: rgba(5,6,7,0.24);
+            border-color: rgba(5,6,7,0.28);
             background: var(--ink);
             color: #fff;
             transform: translateX(6px);
         }
 
         .pillar-card {
-            border: 1px solid var(--line);
-            border-radius: var(--radius-lg);
-            background: var(--glass);
-            backdrop-filter: blur(14px);
-            padding: 48px;
             display: grid;
-            gap: 22px;
+            gap: 20px;
         }
 
-        .pillar-card h3 {
-            font-size: 28px;
-            font-weight: 300;
-        }
+        .pillar-card h3 { font-size: 26px; font-weight: 300; }
 
-        .pillar-card p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: rgba(5,6,7,0.64);
-        }
+        .pillar-card p { font-size: 16px; line-height: 1.7; color: rgba(5,6,7,0.62); }
 
-        .metric-list {
-            display: grid;
-            gap: 12px;
-        }
+        .metric-list { display: grid; gap: 12px; }
 
         .metric-list li {
             list-style: none;
             font-size: 14px;
             letter-spacing: 0.02em;
-            color: rgba(5,6,7,0.62);
-            padding-left: 18px;
+            color: rgba(5,6,7,0.6);
+            padding-left: 16px;
             position: relative;
         }
 
@@ -297,22 +244,14 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 9px;
+            top: 8px;
             width: 6px;
             height: 6px;
             border-radius: 50%;
             background: var(--ink);
         }
 
-        .stage-board {
-            border: 1px solid var(--line);
-            border-radius: var(--radius-lg);
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            padding: 48px;
-            display: grid;
-            gap: 32px;
-        }
+        .stage-board { display: grid; gap: 32px; }
 
         .stage-header {
             display: flex;
@@ -322,66 +261,50 @@
             gap: 16px;
         }
 
-        .stage-slider {
-            position: relative;
-            width: 100%;
-        }
+        .stage-slider { position: relative; width: 100%; }
 
         .stage-slider input {
-            -webkit-appearance: none;
-            appearance: none;
             width: 100%;
+            appearance: none;
             height: 6px;
             border-radius: 999px;
-            background: rgba(5,6,7,0.08);
+            background: rgba(5,6,7,0.1);
         }
 
         .stage-slider input::-webkit-slider-thumb {
-            -webkit-appearance: none;
             appearance: none;
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: var(--ink);
             border: 3px solid #fff;
             box-shadow: 0 6px 12px rgba(5,6,7,0.18);
             cursor: pointer;
-            transition: transform 0.25s ease;
-        }
-
-        .stage-slider input::-webkit-slider-thumb:hover {
-            transform: scale(1.04);
         }
 
         .stage-ticks {
             display: flex;
             justify-content: space-between;
-            margin-top: 16px;
+            margin-top: 14px;
             font-size: 11px;
             letter-spacing: 0.24em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
-        .stage-lines {
-            display: grid;
-            gap: 20px;
-        }
+        .stage-bars { display: grid; gap: 18px; }
 
-        .stage-line {
-            display: grid;
-            gap: 8px;
-        }
+        .stage-row { display: grid; gap: 6px; }
 
-        .stage-line label {
+        .stage-row label {
             font-size: 12px;
-            letter-spacing: 0.24em;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
         .track {
-            height: 8px;
+            height: 7px;
             border-radius: 999px;
             background: rgba(5,6,7,0.08);
             overflow: hidden;
@@ -389,124 +312,52 @@
 
         .fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--ink), rgba(5,6,7,0.35));
             width: 0;
+            background: linear-gradient(90deg, var(--ink), rgba(5,6,7,0.4));
             transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .value {
-            font-size: 13px;
-            letter-spacing: 0.04em;
-            color: rgba(5,6,7,0.62);
-        }
+        .value { font-size: 13px; letter-spacing: 0.04em; color: rgba(5,6,7,0.6); }
 
-        .gauge-grid {
+        .score-panel {
             display: grid;
-            gap: 38px;
+            gap: 22px;
         }
 
-        @media (min-width: 980px) {
-            .gauge-grid {
-                grid-template-columns: 1fr 1fr;
-                align-items: center;
-            }
+        .score-panel strong {
+            font-size: 46px;
+            font-weight: 200;
+            letter-spacing: 0.1em;
         }
 
-        .gauge {
-            position: relative;
-            width: clamp(200px, 32vw, 240px);
-            aspect-ratio: 1;
-            margin: 24px auto 0;
-            max-width: 100%;
-        }
+        .score-panel p { font-size: 16px; line-height: 1.7; color: rgba(5,6,7,0.62); }
 
-        .gauge svg {
-            width: 100%;
-            height: 100%;
-        }
+        .timeline { display: grid; gap: 24px; }
 
-        .gauge-summary {
-            font-size: 16px;
-            line-height: 1.8;
-            color: rgba(5,6,7,0.64);
-        }
-
-        .timeline {
-            border: 1px solid var(--line);
-            border-radius: var(--radius-lg);
-            background: rgba(255,255,255,0.82);
-            backdrop-filter: blur(12px);
-            padding: 48px;
-        }
-
-        .timeline-list {
-            display: grid;
-            gap: 26px;
-        }
-
-        .timeline-step {
-            display: grid;
-            gap: 10px;
-        }
+        .timeline-step { display: grid; gap: 8px; }
 
         .timeline-step h4 {
-            font-size: 14px;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: rgba(5,6,7,0.52);
-        }
-
-        .timeline-step p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: rgba(5,6,7,0.64);
-        }
-
-        .quote {
-            margin-top: 140px;
-            border-radius: var(--radius-lg);
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(215,224,255,0.6));
-            border: 1px solid rgba(5,6,7,0.05);
-            padding: 56px;
-            display: grid;
-            gap: 26px;
-            box-shadow: 0 40px 70px rgba(5,6,7,0.1);
-        }
-
-        .quote blockquote {
-            font-size: clamp(24px, 4vw, 34px);
-            font-weight: 300;
-            line-height: 1.4;
-        }
-
-        .quote cite {
             font-size: 12px;
-            letter-spacing: 0.28em;
+            letter-spacing: 0.24em;
             text-transform: uppercase;
             color: rgba(5,6,7,0.5);
         }
 
+        .timeline-step p { font-size: 16px; line-height: 1.7; color: rgba(5,6,7,0.62); }
+
         .cta {
-            margin-top: 140px;
-            border-radius: var(--radius-lg);
-            padding: 56px;
-            background: rgba(5,6,7,0.9);
+            border-radius: 32px;
+            padding: 52px;
+            background: linear-gradient(135deg, rgba(5,6,7,0.9), rgba(5,6,7,0.75));
             color: #fff;
-            display: grid;
-            gap: 18px;
             text-align: center;
+            display: grid;
+            gap: 16px;
         }
 
-        .cta h2 {
-            font-size: clamp(28px, 4vw, 40px);
-            font-weight: 200;
-            letter-spacing: 0.02em;
-        }
+        .cta h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 200; }
 
-        .cta p {
-            font-size: 16px;
-            color: rgba(255,255,255,0.7);
-        }
+        .cta p { font-size: 16px; color: rgba(255,255,255,0.72); }
 
         .cta a {
             justify-self: center;
@@ -514,20 +365,17 @@
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 36px;
+            padding: 14px 34px;
             border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.32);
-            letter-spacing: 0.24em;
+            border: 1px solid rgba(255,255,255,0.25);
+            letter-spacing: 0.22em;
             text-transform: uppercase;
             font-size: 12px;
             text-decoration: none;
-            transition: transform 0.35s ease, background 0.35s ease;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
-        .cta a:hover {
-            transform: translateY(-3px);
-            background: rgba(255,255,255,0.12);
-        }
+        .cta a:hover { transform: translateY(-3px); background: rgba(255,255,255,0.12); }
 
         footer {
             margin-top: 120px;
@@ -538,68 +386,44 @@
             color: rgba(5,6,7,0.45);
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         @media (max-width: 700px) {
-            .wrap {
-                padding: 52px 0 100px;
-            }
-
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 18px;
-            }
-
-            .pillar-card, .stage-board, .timeline, .quote, .cta {
-                padding: 32px;
-            }
-
-            .back {
-                padding: 12px 20px;
-            }
-
-            .gauge {
-                margin-top: 40px;
-            }
+            .frame { padding: 56px 0 96px; }
+            .panel { padding: 36px; }
+            .cta { padding: 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="wrap">
+    <div class="frame">
         <header>
-            <div class="label">Flash Intelligence System</div>
+            <div class="tag">Flash Intelligence System</div>
             <a class="back" href="index.html">Back to Intelligence</a>
         </header>
 
         <section class="hero">
             <div>
                 <h1>CAMP</h1>
-                <p>Capital. Advantage. Market. People. Four pillars engineered for founders who want to see what investors see—before the meeting. CAMP turns raw metrics into a fundability signal with Johnny Ive-level precision.</p>
-                <div class="metrics">
-                    <div class="metric"><span>Signals tracked</span><strong>126</strong></div>
-                    <div class="metric"><span>Outcomes trained</span><strong>50k+</strong></div>
-                    <div class="metric"><span>Models in flight</span><strong>17</strong></div>
+                <p>Capital, Advantage, Market, People. Four lenses engineered to give founders and investors the same view of fundability—with the restraint and clarity of a Johnny Ive instrument panel.</p>
+                <div class="hero-metrics">
+                    <div class="hero-metric"><span>Signals tracked</span><strong>126</strong></div>
+                    <div class="hero-metric"><span>Outcomes trained</span><strong>50k+</strong></div>
+                    <div class="hero-metric"><span>Models in flight</span><strong>17</strong></div>
                 </div>
             </div>
-            <div class="orb" aria-hidden="true">
-                <div class="halo"></div>
-                <div class="pulse-ring"></div>
-                <div class="pulse-ring"></div>
-                <div class="core"><span>Framework</span><strong>CAMP</strong></div>
+            <div class="hero-panel">
+                <span class="tag">Framework</span>
+                <strong>CAMP</strong>
+                <p style="font-size:14px; color:rgba(5,6,7,0.5); line-height:1.6;">The same signal engine we use to underwrite founders. Elegantly simple, relentlessly honest.</p>
             </div>
         </section>
 
         <section>
             <div class="section-head">
-                <div class="section-title">Four lenses. One verdict.</div>
-                <p class="section-copy">Select a pillar to see how CAMP dissects your company. Each lens feeds the overall fundability score while giving you the precise moves that change investor conviction.</p>
+                <div class="section-title">Four pillars. One verdict.</div>
+                <p class="section-copy">Select a pillar to see how CAMP reads your startup. Each lens isolates a different tension founders must master.</p>
             </div>
-            <div class="pillar-panel">
-                <div class="pillar-menu" role="tablist" aria-label="CAMP pillars">
+            <div class="panel pillar-grid">
+                <div class="pillar-list" role="tablist" aria-label="CAMP pillars">
                     <button class="pillar-btn active" data-pillar="capital" role="tab" aria-selected="true"><strong>Capital</strong><span>Financial discipline</span></button>
                     <button class="pillar-btn" data-pillar="advantage" role="tab" aria-selected="false"><strong>Advantage</strong><span>Compounding edge</span></button>
                     <button class="pillar-btn" data-pillar="market" role="tab" aria-selected="false"><strong>Market</strong><span>Scale &amp; urgency</span></button>
@@ -607,7 +431,7 @@
                 </div>
                 <article class="pillar-card" id="pillarCard">
                     <h3 id="pillarTitle">Capital — financial discipline</h3>
-                    <p id="pillarSummary">We analyse how efficiently you convert capital into momentum: burn multiple, runway resilience, investor quality, and how gracefully the model scales.</p>
+                    <p id="pillarSummary">We analyse how efficiently you convert capital into momentum: burn multiple, runway resilience, investor quality, and elasticity as you scale.</p>
                     <ul class="metric-list" id="pillarMetrics"></ul>
                 </article>
             </div>
@@ -615,13 +439,13 @@
 
         <section>
             <div class="section-head">
-                <div class="section-title">Stage-aware by design.</div>
-                <p class="section-copy">Drag the timeline to feel CAMP shift its attention. Early teams are graded on founders and unfair advantages; later companies are rewarded for operational mastery.</p>
+                <div class="section-title">Weighting that adapts with you.</div>
+                <p class="section-copy">Drag across stages to feel the emphasis shift. CAMP rewards founders who tighten the right screws at the right time.</p>
             </div>
-            <div class="stage-board">
+            <div class="panel stage-board">
                 <div class="stage-header">
-                    <div class="label" id="stageLabel">Pre-Seed Focus</div>
-                    <div class="label" id="stageScore">Target Score • 68</div>
+                    <div class="tag" id="stageLabel">Pre-Seed Focus</div>
+                    <div class="tag" id="stageScore">Target Score • 68</div>
                 </div>
                 <div class="stage-slider">
                     <input type="range" min="0" max="3" value="0" id="stageRange" aria-label="Stage weighting control">
@@ -632,70 +456,46 @@
                         <span>Series B+</span>
                     </div>
                 </div>
-                <div class="stage-lines" aria-live="polite">
-                    <div class="stage-line">
+                <div class="stage-bars" aria-live="polite">
+                    <div class="stage-row">
                         <label>Capital</label>
                         <div class="track"><div class="fill" id="fillCapital"></div></div>
                         <div class="value" id="valueCapital">10%</div>
                     </div>
-                    <div class="stage-line">
+                    <div class="stage-row">
                         <label>Advantage</label>
                         <div class="track"><div class="fill" id="fillAdvantage"></div></div>
                         <div class="value" id="valueAdvantage">30%</div>
                     </div>
-                    <div class="stage-line">
+                    <div class="stage-row">
                         <label>Market</label>
                         <div class="track"><div class="fill" id="fillMarket"></div></div>
                         <div class="value" id="valueMarket">20%</div>
                     </div>
-                    <div class="stage-line">
+                    <div class="stage-row">
                         <label>People</label>
                         <div class="track"><div class="fill" id="fillPeople"></div></div>
                         <div class="value" id="valuePeople">40%</div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="section-head">
-                <div class="section-title">From score to strategy.</div>
-                <p class="section-copy">CAMP doesn’t just produce a number. It tells you what investors will assume—and the exact sequence to prove them wrong.</p>
-            </div>
-            <div class="gauge-grid">
-                <div class="gauge" aria-hidden="true">
-                    <svg viewBox="0 0 160 160">
-                        <circle cx="80" cy="80" r="70" stroke="rgba(5,6,7,0.1)" stroke-width="14" fill="none"/>
-                        <circle cx="80" cy="80" r="70" stroke="rgba(5,6,7,0.2)" stroke-width="14" fill="none" stroke-linecap="round" transform="rotate(-90 80 80)"/>
-                        <circle id="gaugeArc" cx="80" cy="80" r="70" stroke="var(--ink)" stroke-width="14" fill="none" stroke-linecap="round" transform="rotate(-90 80 80)" stroke-dasharray="439" stroke-dashoffset="439"/>
-                    </svg>
-                    <div class="core">
-                        <span>Fundability</span>
-                        <strong id="scoreNumber">68</strong>
-                    </div>
+                <div class="score-panel">
+                    <strong id="scoreValue">68</strong>
+                    <p id="scoreSummary">Your first proof points are about speed and resilience. Show weekly product motion, early retention sparks, and a path to efficient growth.</p>
                 </div>
-                <div class="gauge-summary" id="scoreSummary">Momentum begins with founders. Prove velocity, showcase retention sparks, and CAMP will raise your signal into partner territory.</div>
             </div>
         </section>
 
         <section>
             <div class="section-head">
                 <div class="section-title">Improvement cadence.</div>
-                <p class="section-copy">Founders who treat CAMP as a companion improve their scores 20–30 points within a quarter. Here’s the typical journey.</p>
+                <p class="section-copy">Founders who integrate CAMP into their workflow raise faster. Follow the rhythm that most portfolio teams use.</p>
             </div>
-            <div class="timeline">
-                <div class="timeline-list" id="timelineList"></div>
-            </div>
-        </section>
-
-        <section class="quote">
-            <blockquote>“We built CAMP the way Ive would design an instrument panel—no noise, only signal. It tells founders the truth and gives them the playbook to bend reality.”</blockquote>
-            <cite>Flash Intelligence Pattern Team</cite>
+            <div class="panel timeline" id="timeline"></div>
         </section>
 
         <section class="cta">
-            <h2>See your CAMP profile.</h2>
-            <p>Ten focused minutes. A precision narrative for your next raise. Get the same intelligence the fund uses to underwrite deals.</p>
+            <h2>See your CAMP profile before you pitch.</h2>
+            <p>Ten minutes. Precision feedback. The same analysis powering the Flash Fund underwriting desk.</p>
             <a href="https://flashintelligence.co" rel="noopener">Begin Analysis</a>
         </section>
 
@@ -706,61 +506,61 @@
         const pillarData = {
             capital: {
                 title: 'Capital — financial discipline',
-                summary: 'We analyse burn multiple, runway, investor quality, and the elasticity of your cost structure. Efficiency is the first proof of judgement.',
+                summary: 'Efficiency is the first proof of judgement. CAMP measures burn multiple, runway resilience, investor quality, and how gracefully you scale spend.',
                 metrics: [
-                    'Monthly burn, runway scenarios, and capital efficiency',
-                    'Quality of existing investors and cap-table resilience',
-                    'Speed of turning fresh capital into working product'
+                    'Monthly burn, runway scenarios, capital efficiency',
+                    'Signal quality of investors currently backing you',
+                    'Speed of turning new dollars into shipped product'
                 ]
             },
             advantage: {
                 title: 'Advantage — compounding edge',
-                summary: 'CAMP tests moats that gain strength with time: proprietary data, design, network effects, and pricing power that widens instead of erodes.',
+                summary: 'Defensibility that compounds. Proprietary data, switching costs, network effects, and margin expansion as adoption grows.',
                 metrics: [
-                    'Depth of proprietary tech and defensible insights',
-                    'Switching costs and network loops that lock in value',
-                    'Evidence that margin expands as adoption grows'
+                    'Depth of IP, data moats, or exclusive distribution',
+                    'Customer switching costs and retention flywheels',
+                    'Evidence pricing power increases with scale'
                 ]
             },
             market: {
                 title: 'Market — scale and urgency',
-                summary: 'We quantify market velocity, retention, willingness to pay, and competitive density. Great teams in small markets still fail; CAMP prevents that blind spot.',
+                summary: 'We map TAM and velocity, but we obsess over urgency—are customers desperate for the problem you solve? Retention and expansion tell the truth.',
                 metrics: [
-                    'TAM segmentation, velocity, and expansion rate',
-                    'Retention curves and customer urgency signals',
-                    'Competitive landscape mapped against share capture'
+                    'Segment velocity, expansion, and net revenue retention',
+                    'Buyer urgency measured through engagement and payback',
+                    'Competitive density and share capture momentum'
                 ]
             },
             people: {
                 title: 'People — execution gravity',
-                summary: 'Founders, team, and pace. We read operating cadence, learning speed, hiring gravity, and how quickly insight becomes product shipped.',
+                summary: 'Founder-market fit, hiring magnetism, and operating cadence. CAMP reads how fast insight becomes product and how resilient the team is under stress.',
                 metrics: [
-                    'Iteration tempo, shipping cadence, retrospective loop',
-                    'Hiring magnetism and bench of advisors/operators',
-                    'Founder narrative, resilience, and market obsession'
+                    'Iteration tempo, shipping cadence, learning velocity',
+                    'Quality of hires, advisors, and operating cadence',
+                    'Founder grit and clarity of the company narrative'
                 ]
             }
         };
 
-        const pillarBtns = Array.from(document.querySelectorAll('.pillar-btn'));
-        const titleEl = document.getElementById('pillarTitle');
-        const summaryEl = document.getElementById('pillarSummary');
-        const metricsEl = document.getElementById('pillarMetrics');
+        const pillarButtons = Array.from(document.querySelectorAll('.pillar-btn'));
+        const pillarTitle = document.getElementById('pillarTitle');
+        const pillarSummary = document.getElementById('pillarSummary');
+        const pillarMetrics = document.getElementById('pillarMetrics');
 
         function setPillar(key) {
             const data = pillarData[key];
             if (!data) return;
-            pillarBtns.forEach(btn => {
+            pillarButtons.forEach(btn => {
                 const active = btn.dataset.pillar === key;
                 btn.classList.toggle('active', active);
                 btn.setAttribute('aria-selected', active ? 'true' : 'false');
             });
-            titleEl.textContent = data.title;
-            summaryEl.textContent = data.summary;
-            metricsEl.innerHTML = data.metrics.map(item => `<li>${item}</li>`).join('');
+            pillarTitle.textContent = data.title;
+            pillarSummary.textContent = data.summary;
+            pillarMetrics.innerHTML = data.metrics.map(item => `<li>${item}</li>`).join('');
         }
 
-        pillarBtns.forEach(btn => {
+        pillarButtons.forEach(btn => {
             btn.addEventListener('click', () => setPillar(btn.dataset.pillar));
             btn.addEventListener('keydown', event => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -776,25 +576,25 @@
             {
                 label: 'Pre-Seed Focus',
                 score: 68,
-                narrative: 'Momentum is founder-led. Show relentless shipping and early retention sparks; CAMP elevates your signal to credible territory.',
+                narrative: 'Momentum begins with founders. Show weekly product motion, early retention sparks, and relentless learning.',
                 weights: { capital: 10, advantage: 30, market: 20, people: 40 }
             },
             {
                 label: 'Seed Focus',
                 score: 74,
-                narrative: 'Traction with purpose. Investors expect data-driven proof of demand and early efficiency. CAMP highlights the gaps before they do.',
+                narrative: 'Proof of adoption. Investors expect data-led storytelling, improving efficiency, and a clear path to repeatable growth.',
                 weights: { capital: 18, advantage: 30, market: 27, people: 25 }
             },
             {
                 label: 'Series A Focus',
                 score: 82,
-                narrative: 'Scale responsibly. Market velocity and capital discipline dominate. CAMP keeps founders honest about the systems they still need.',
+                narrative: 'Scale responsibly. Market velocity and capital discipline dominate—CAMP shows exactly where efficiency must tighten.',
                 weights: { capital: 28, advantage: 24, market: 30, people: 18 }
             },
             {
                 label: 'Series B+ Focus',
                 score: 88,
-                narrative: 'Operational mastery. Investors expect you to own your category and cash flow. CAMP grades the stability of the machine you’ve built.',
+                narrative: 'Operational mastery. You are graded on ownership of your segment, efficient growth, and resilience under pressure.',
                 weights: { capital: 36, advantage: 20, market: 28, people: 16 }
             }
         ];
@@ -810,25 +610,14 @@
         const valueAdvantage = document.getElementById('valueAdvantage');
         const valueMarket = document.getElementById('valueMarket');
         const valuePeople = document.getElementById('valuePeople');
-        const gaugeArc = document.getElementById('gaugeArc');
-        const scoreNumber = document.getElementById('scoreNumber');
+        const scoreValue = document.getElementById('scoreValue');
         const scoreSummary = document.getElementById('scoreSummary');
-
-        const circumference = 2 * Math.PI * 70;
-        gaugeArc.setAttribute('stroke-dasharray', circumference);
-
-        function animateGauge(target) {
-            const clamped = Math.max(0, Math.min(target, 100));
-            const offset = circumference - circumference * (clamped / 100);
-            gaugeArc.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
-            gaugeArc.setAttribute('stroke-dashoffset', offset);
-        }
 
         function setStage(index) {
             const stage = stages[index] || stages[0];
             stageLabel.textContent = stage.label;
             stageScore.textContent = `Target Score • ${stage.score}`;
-            scoreNumber.textContent = stage.score;
+            scoreValue.textContent = stage.score;
             scoreSummary.textContent = stage.narrative;
             fillCapital.style.width = `${stage.weights.capital}%`;
             fillAdvantage.style.width = `${stage.weights.advantage}%`;
@@ -838,7 +627,6 @@
             valueAdvantage.textContent = `${stage.weights.advantage}%`;
             valueMarket.textContent = `${stage.weights.market}%`;
             valuePeople.textContent = `${stage.weights.people}%`;
-            animateGauge(stage.score);
         }
 
         stageRange.addEventListener('input', event => {
@@ -848,26 +636,14 @@
         setStage(0);
 
         const timelineSteps = [
-            {
-                title: 'Weeks 1-2',
-                copy: 'Baseline your score, internalise the five reasons investors would pass, and align the team on a single narrative.'
-            },
-            {
-                title: 'Weeks 3-4',
-                copy: 'Implement two high-impact fixes from the action plan. Re-run CAMP to prove movement and update your fundraising story.'
-            },
-            {
-                title: 'Weeks 5-6',
-                copy: 'Layer in efficiency metrics, tighten retention, and start sharing progress snapshots with your future partners.'
-            },
-            {
-                title: 'Weeks 7+',
-                copy: 'Score crosses 75. Unlock FLASH Fund, partner interviews, and an exact map for your next raise.'
-            }
+            { title: 'Weeks 1-2', copy: 'Baseline CAMP, align the founding team, and reframe the deck around what investors will actually weigh.' },
+            { title: 'Weeks 3-4', copy: 'Execute the top two fixes from the action plan. Re-run the analysis to prove motion and tighten the story.' },
+            { title: 'Weeks 5-6', copy: 'Layer in efficiency metrics, sharpen retention, and tee up conversations with investors who match your profile.' },
+            { title: 'Weeks 7+', copy: 'Score crosses 75. Unlock FLASH Fund access, partner interviews, and a roadmap for your next raise.' }
         ];
 
-        const timelineList = document.getElementById('timelineList');
-        timelineList.innerHTML = timelineSteps.map(step => `
+        const timeline = document.getElementById('timeline');
+        timeline.innerHTML = timelineSteps.map(step => `
             <div class="timeline-step">
                 <h4>${step.title}</h4>
                 <p>${step.copy}</p>
