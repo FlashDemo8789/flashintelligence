@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flash CAMP Framework</title>
+    <title>CAMP Framework | Flash Intelligence</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
@@ -15,10 +15,11 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #fff;
-            color: #000;
+            background: #f8f8f8;
+            color: #050505;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
 
         a {
@@ -29,430 +30,624 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image:
-                linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
-            background-size: 120px 120px;
+            width: 160vw;
+            height: 160vh;
             pointer-events: none;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.022) 1px, transparent 1px);
+            background-size: 120px 120px;
+            transform: translate3d(-10vw, -10vh, 0) rotate(2deg);
             z-index: 1;
+            animation: drift 40s linear infinite;
         }
 
-        .page {
+        @keyframes drift {
+            0% { transform: translate3d(-10vw, -10vh, 0) rotate(2deg); }
+            50% { transform: translate3d(-12vw, -12vh, 0) rotate(2.4deg); }
+            100% { transform: translate3d(-10vw, -10vh, 0) rotate(2deg); }
+        }
+
+        main {
             position: relative;
-            z-index: 10;
-            padding: 80px min(12vw, 120px) 160px;
+            z-index: 5;
+            padding: 64px min(12vw, 120px) 140px;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 80px;
+            margin-bottom: 72px;
         }
 
         .label {
             font-size: 11px;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.22em;
             text-transform: uppercase;
-            color: rgba(0,0,0,0.5);
+            color: rgba(5, 5, 5, 0.45);
         }
 
-        .back-link {
+        .nav-link {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            font-size: 12px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
             padding: 12px 24px;
             border-radius: 999px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: rgba(255,255,255,0.9);
-            transition: background 0.3s ease, color 0.3s ease;
+            border: 1px solid rgba(5, 5, 5, 0.16);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            font-size: 12px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
         }
 
-        .back-link:hover {
-            background: #000;
+        .nav-link:hover {
+            background: #050505;
             color: #fff;
+            transform: translateY(-2px);
         }
 
         .hero {
+            position: relative;
             display: grid;
-            gap: 28px;
-            margin-bottom: 120px;
+            gap: 40px;
+            margin-bottom: 140px;
         }
 
-        .hero-title {
-            font-size: clamp(56px, 12vw, 120px);
+        @media (min-width: 980px) {
+            .hero {
+                grid-template-columns: 1.2fr 1fr;
+                align-items: center;
+            }
+        }
+
+        .hero-text h1 {
+            font-size: clamp(64px, 14vw, 140px);
+            letter-spacing: 0.35em;
             font-weight: 100;
-            letter-spacing: 0.3em;
+            line-height: 0.88;
             text-transform: uppercase;
-            line-height: 0.9;
+            margin-bottom: 28px;
         }
 
-        .hero-copy {
-            max-width: 640px;
+        .hero-text p {
+            max-width: 540px;
             font-size: 18px;
             line-height: 1.7;
-            color: rgba(0,0,0,0.6);
+            color: rgba(5, 5, 5, 0.6);
+        }
+
+        .hero-orb {
+            position: relative;
+            width: min(420px, 70vw);
+            aspect-ratio: 1;
+            margin: 0 auto;
+        }
+
+        .orb-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.35) 35%, rgba(0,0,0,0.05) 65%, transparent 78%);
+            filter: blur(0.5px);
+        }
+
+        .orb-gradient {
+            position: absolute;
+            inset: 14%;
+            border-radius: 50%;
+            background: conic-gradient(from 140deg, rgba(0,0,0,0.05), rgba(0,0,0,0.2), rgba(0,0,0,0.05));
+            animation: orbit 18s linear infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .orb-core {
+            position: absolute;
+            inset: 26%;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            display: grid;
+            place-items: center;
+            text-align: center;
+            gap: 16px;
+            padding: 30px;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.08);
+        }
+
+        .orb-core span {
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(5,5,5,0.45);
+        }
+
+        .orb-core strong {
+            font-size: 42px;
+            font-weight: 200;
+            letter-spacing: 0.4em;
+        }
+
+        .hero-metrics {
+            display: grid;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .hero-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(5,5,5,0.08);
+        }
+
+        .hero-metric h4 {
+            font-size: 12px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(5,5,5,0.5);
+        }
+
+        .hero-metric span {
+            font-size: 22px;
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 140px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .section-header p {
+            max-width: 520px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(5,5,5,0.55);
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 200;
+            letter-spacing: -0.012em;
         }
 
         .divider {
             height: 1px;
-            background: rgba(0,0,0,0.08);
+            background: rgba(5,5,5,0.08);
             margin: 120px 0;
         }
 
-        .section-heading {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 48px;
-        }
-
-        .section-heading h2 {
-            font-size: clamp(32px, 4vw, 48px);
-            font-weight: 200;
-            letter-spacing: -0.01em;
-        }
-
-        .section-heading p {
-            max-width: 560px;
-            font-size: 16px;
-            line-height: 1.7;
-            color: rgba(0,0,0,0.58);
-        }
-
-        .pillar-grid {
+        .pillars {
             display: grid;
-            gap: 28px;
+            gap: 24px;
         }
 
-        @media (min-width: 900px) {
-            .pillar-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
+        @media (min-width: 1020px) {
+            .pillars {
+                grid-template-columns: 280px 1fr;
+                gap: 48px;
             }
         }
 
-        .pillar-card {
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 20px;
-            padding: 32px;
-            background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04));
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            min-height: 240px;
+        .pillar-list {
+            display: grid;
+            gap: 12px;
         }
 
-        .pillar-card span {
-            font-size: 12px;
-            letter-spacing: 0.3em;
+        .pillar-button {
+            border: 1px solid rgba(5,5,5,0.12);
+            border-radius: 18px;
+            background: rgba(255,255,255,0.7);
+            padding: 20px 24px;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.3s ease, border 0.3s ease, background 0.3s ease;
+        }
+
+        .pillar-button strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .pillar-button span {
+            font-size: 11px;
+            letter-spacing: 0.28em;
             text-transform: uppercase;
-            color: rgba(0,0,0,0.45);
+            color: rgba(5,5,5,0.45);
         }
 
-        .pillar-card h3 {
-            font-size: 20px;
-            font-weight: 400;
+        .pillar-button.active {
+            border-color: #050505;
+            background: #050505;
+            color: #fff;
+            transform: translateX(4px);
         }
 
-        .pillar-card p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: rgba(0,0,0,0.58);
-        }
-
-        .metrics-panel {
-            border: 1px solid rgba(0,0,0,0.08);
+        .pillar-detail {
+            border: 1px solid rgba(5,5,5,0.08);
             border-radius: 24px;
-            padding: 40px;
-            background: rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(14px);
+            padding: 44px;
+            display: grid;
+            gap: 24px;
+        }
+
+        .pillar-detail h3 {
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .pillar-detail p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(5,5,5,0.65);
+        }
+
+        .metric-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .metric-list li {
+            list-style: none;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+            color: rgba(5,5,5,0.6);
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .metric-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #050505;
+        }
+
+        .stage-module {
+            border-radius: 28px;
+            border: 1px solid rgba(5,5,5,0.08);
+            background: rgba(255,255,255,0.76);
+            backdrop-filter: blur(18px);
+            padding: 48px;
             display: grid;
             gap: 32px;
         }
 
-        .metrics-panel header {
+        .stage-module-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: baseline;
+            gap: 18px;
         }
 
-        .stage-controls {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        .stage-slider {
+            position: relative;
+            width: 100%;
         }
 
-        .stage-chip {
-            padding: 10px 18px;
+        .stage-slider input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
             border-radius: 999px;
-            border: 1px solid rgba(0,0,0,0.15);
-            background: transparent;
-            font-size: 12px;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(0,0,0,0.55);
+            background: rgba(5,5,5,0.08);
+            outline: none;
+        }
+
+        .stage-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #050505;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .stage-chip.active {
-            background: #000;
-            color: #fff;
-            border-color: #000;
+        .stage-slider input[type="range"]::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #050505;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
         }
 
-        .stage-body {
-            display: grid;
-            gap: 20px;
-        }
-
-        .stage-row {
+        .stage-ticks {
             display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .stage-row span:first-child {
-            width: 80px;
-            font-size: 12px;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: 11px;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: rgba(0,0,0,0.45);
+            color: rgba(5,5,5,0.45);
+        }
+
+        .stage-bars {
+            display: grid;
+            gap: 18px;
         }
 
         .stage-bar {
-            flex: 1;
-            height: 6px;
-            border-radius: 999px;
-            background: rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .stage-fill {
-            height: 100%;
-            background: #000;
-            width: 0;
-            transition: width 0.4s ease;
-        }
-
-        .stage-value {
-            min-width: 52px;
-            text-align: right;
-            font-size: 13px;
-            letter-spacing: 0.05em;
-        }
-
-        .score-grid {
-            display: grid;
-            gap: 24px;
-        }
-
-        @media (min-width: 900px) {
-            .score-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-        }
-
-        .score-card {
-            padding: 32px;
-            border-radius: 20px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: rgba(0,0,0,0.02);
-            display: grid;
-            gap: 12px;
-        }
-
-        .score-label {
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .score-card p {
-            font-size: 14px;
-            line-height: 1.7;
-            color: rgba(0,0,0,0.6);
-        }
-
-        .data-grid {
-            display: grid;
-            gap: 24px;
-        }
-
-        @media (min-width: 1000px) {
-            .data-grid {
-                grid-template-columns: 1.2fr 1fr;
-            }
-        }
-
-        .radar-shell {
-            position: relative;
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 24px;
-            padding: 48px;
-            background: rgba(0,0,0,0.02);
-        }
-
-        .radar-canvas {
-            width: 100%;
-            aspect-ratio: 1;
-            display: block;
-        }
-
-        .insight-list {
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 24px;
-            padding: 32px;
-            background: rgba(0,0,0,0.02);
-            display: grid;
-            gap: 24px;
-        }
-
-        .insight-item {
             display: grid;
             gap: 6px;
         }
 
-        .insight-item span {
+        .stage-bar label {
             font-size: 12px;
-            letter-spacing: 0.25em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: rgba(0,0,0,0.5);
+            color: rgba(5,5,5,0.45);
         }
 
-        .insight-item p {
-            font-size: 15px;
+        .stage-bar .bar-track {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(5,5,5,0.08);
+            overflow: hidden;
+        }
+
+        .stage-bar .bar-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #050505, rgba(5,5,5,0.4));
+            transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-bar .bar-value {
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            color: rgba(5,5,5,0.6);
+        }
+
+        .gauge-grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        @media (min-width: 980px) {
+            .gauge-grid {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+        }
+
+        .score-gauge {
+            position: relative;
+            width: min(320px, 68vw);
+            aspect-ratio: 1;
+            margin: 0 auto;
+        }
+
+        .score-gauge svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-label {
+            position: absolute;
+            inset: 25%;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.85);
+            display: grid;
+            place-items: center;
+            text-align: center;
+            gap: 6px;
+            font-size: 13px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(5,5,5,0.45);
+        }
+
+        .score-label strong {
+            font-size: 42px;
+            font-weight: 200;
+            letter-spacing: 0.08em;
+            color: #050505;
+        }
+
+        .score-copy {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(5,5,5,0.6);
+        }
+
+        .pattern-feed {
+            border-radius: 24px;
+            border: 1px solid rgba(5,5,5,0.08);
+            background: rgba(255,255,255,0.78);
+            backdrop-filter: blur(16px);
+            padding: 40px;
+            display: grid;
+            gap: 28px;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .feed-track {
+            position: relative;
+            overflow: hidden;
+            height: 170px;
+        }
+
+        .feed-items {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            gap: 18px;
+            animation: slide-feed 26s linear infinite;
+        }
+
+        @keyframes slide-feed {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50%); }
+            100% { transform: translateY(0); }
+        }
+
+        .feed-item {
             line-height: 1.6;
-            color: rgba(0,0,0,0.65);
+            color: rgba(5,5,5,0.6);
+        }
+
+        .feed-item strong {
+            display: block;
+            font-weight: 500;
+            color: rgba(5,5,5,0.8);
         }
 
         footer {
-            margin-top: 140px;
+            margin-top: 120px;
             text-align: center;
             font-size: 12px;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: rgba(0,0,0,0.4);
+            color: rgba(5,5,5,0.45);
         }
 
-        @media (max-width: 700px) {
-            .page {
-                padding: 60px 24px 120px;
+        @media (max-width: 720px) {
+            main {
+                padding: 48px 24px 100px;
             }
 
             header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 18px;
             }
 
-            .hero-copy {
+            .hero-text p {
                 font-size: 16px;
             }
 
-            .metrics-panel {
-                padding: 28px;
+            .stage-module {
+                padding: 32px;
             }
 
-            .stage-row {
-                flex-wrap: wrap;
-                gap: 12px;
+            .pillar-detail {
+                padding: 32px;
             }
 
-            .stage-row span:first-child {
-                width: auto;
+            .pattern-feed {
+                padding: 32px;
             }
         }
     </style>
 </head>
 <body>
     <div class="grid-bg"></div>
-    <div class="page">
+    <main>
         <header>
             <div class="label">Flash Intelligence System</div>
-            <a class="back-link" href="index.html">Back to Intelligence</a>
+            <a class="nav-link" href="index.html">Back to Intelligence</a>
         </header>
 
         <section class="hero">
-            <h1 class="hero-title">CAMP</h1>
-            <p class="hero-copy">Capital, Advantage, Market, and People are the lenses our intelligence engine uses to read a startup. The framework was trained on 50,000+ funding outcomes so founders get a precise map of what investors will see—before the meeting.</p>
+            <div class="hero-text">
+                <h1>CAMP</h1>
+                <p>An engineered lens for founders and investors to see the same story. CAMP scores Capital, Advantage, Market, and People with the precision of our intelligence engine—feed your data in, get conviction out.</p>
+                <div class="hero-metrics">
+                    <div class="hero-metric"><h4>Signals Tracked</h4><span>126</span></div>
+                    <div class="hero-metric"><h4>Models Running</h4><span>17</span></div>
+                    <div class="hero-metric"><h4>Outcomes Trained</h4><span>50k+</span></div>
+                </div>
+            </div>
+            <div class="hero-orb" aria-hidden="true">
+                <div class="orb-ring"></div>
+                <div class="orb-gradient"></div>
+                <div class="orb-core"><span>Evaluation System</span><strong>CAMP</strong></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">Four pillars. One integrated verdict.</div>
+                <p>Every founder is evaluated through the same architecture. Select a pillar to see the signals CAMP reads and how it influences fundability.</p>
+            </div>
+            <div class="pillars">
+                <div class="pillar-list" role="tablist" aria-label="CAMP pillars">
+                    <button class="pillar-button active" data-pillar="capital" role="tab" aria-selected="true"><strong>Capital</strong><span>Financial Discipline</span></button>
+                    <button class="pillar-button" data-pillar="advantage" role="tab" aria-selected="false"><strong>Advantage</strong><span>Compounding Edge</span></button>
+                    <button class="pillar-button" data-pillar="market" role="tab" aria-selected="false"><strong>Market</strong><span>Scale &amp; Urgency</span></button>
+                    <button class="pillar-button" data-pillar="people" role="tab" aria-selected="false"><strong>People</strong><span>Execution Gravity</span></button>
+                </div>
+                <article class="pillar-detail" id="pillarDetail">
+                    <h3 id="pillarTitle">Capital — financial discipline</h3>
+                    <p id="pillarSummary">We examine how precisely you convert capital into momentum—runway, burn efficiency, investor quality, and the resilience of your cap table under stress.</p>
+                    <ul class="metric-list" id="pillarMetrics"></ul>
+                </article>
+            </div>
         </section>
 
         <div class="divider"></div>
 
-        <section>
-            <div class="section-heading">
-                <div class="label">The Four Pillars</div>
-                <h2>The same structure we use to underwrite every company.</h2>
-                <p>Each pillar is a distinct signal path. Weighting shifts by stage, but the combination reveals whether your company will endure investor diligence.</p>
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">Stage-aware weighting.</div>
+                <p>Drag the stage slider to feel CAMP shift its attention. Early founders win on velocity and grit; later-stage teams are judged on market domination and operational efficiency.</p>
             </div>
-            <div class="pillar-grid">
-                <article class="pillar-card">
-                    <span>Capital</span>
-                    <h3>Financial discipline &amp; durability</h3>
-                    <p>We examine burn multiples, runway, investor quality, and capital structure to understand how efficiently you turn money into momentum.</p>
-                </article>
-                <article class="pillar-card">
-                    <span>Advantage</span>
-                    <h3>Defensible, compounding edge</h3>
-                    <p>Proprietary tech, data moats, switching costs, and network effects signal whether your lead intensifies as you scale.</p>
-                </article>
-                <article class="pillar-card">
-                    <span>Market</span>
-                    <h3>Scale, urgency, and pull</h3>
-                    <p>We map TAM, velocity, retention, and segment urgency to ensure you are building where venture outcomes are actually possible.</p>
-                </article>
-                <article class="pillar-card">
-                    <span>People</span>
-                    <h3>Execution gravity &amp; rate</h3>
-                    <p>Founder-market fit, operating cadence, and hiring magnetism tell us how quickly insight becomes shipped product.</p>
-                </article>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <section>
-            <div class="section-heading">
-                <div class="label">Stage Intelligence</div>
-                <h2>Weighting adapts as you mature.</h2>
-                <p>Select your stage to see how CAMP redistributes attention. Early on we weight people and advantage; by Series B, capital efficiency takes the lead.</p>
-            </div>
-            <div class="metrics-panel">
-                <header>
+            <div class="stage-module">
+                <div class="stage-module-header">
                     <div class="label" id="stage-label">Pre-Seed Focus</div>
-                    <div class="stage-controls" role="tablist" aria-label="CAMP stage weighting">
-                        <button class="stage-chip active" data-stage="preseed" role="tab" aria-selected="true">Pre-Seed</button>
-                        <button class="stage-chip" data-stage="seed" role="tab" aria-selected="false">Seed</button>
-                        <button class="stage-chip" data-stage="seriesa" role="tab" aria-selected="false">Series A</button>
-                        <button class="stage-chip" data-stage="seriesb" role="tab" aria-selected="false">Series B+</button>
+                    <div class="label" id="stage-score-label">Target Score</div>
+                </div>
+                <div class="stage-slider">
+                    <input type="range" min="0" max="3" value="0" id="stageRange" aria-label="Stage weighting control">
+                    <div class="stage-ticks">
+                        <span>Pre-Seed</span>
+                        <span>Seed</span>
+                        <span>Series A</span>
+                        <span>Series B+</span>
                     </div>
-                </header>
-                <div class="stage-body" aria-live="polite">
-                    <div class="stage-row">
-                        <span>Capital</span>
-                        <div class="stage-bar"><div class="stage-fill" id="fill-capital"></div></div>
-                        <div class="stage-value" id="value-capital">10%</div>
+                </div>
+                <div class="stage-bars" aria-live="polite">
+                    <div class="stage-bar">
+                        <label>Capital</label>
+                        <div class="bar-track"><div class="bar-fill" id="barCapital"></div></div>
+                        <div class="bar-value" id="valueCapital">10%</div>
                     </div>
-                    <div class="stage-row">
-                        <span>Advantage</span>
-                        <div class="stage-bar"><div class="stage-fill" id="fill-advantage"></div></div>
-                        <div class="stage-value" id="value-advantage">30%</div>
+                    <div class="stage-bar">
+                        <label>Advantage</label>
+                        <div class="bar-track"><div class="bar-fill" id="barAdvantage"></div></div>
+                        <div class="bar-value" id="valueAdvantage">30%</div>
                     </div>
-                    <div class="stage-row">
-                        <span>Market</span>
-                        <div class="stage-bar"><div class="stage-fill" id="fill-market"></div></div>
-                        <div class="stage-value" id="value-market">20%</div>
+                    <div class="stage-bar">
+                        <label>Market</label>
+                        <div class="bar-track"><div class="bar-fill" id="barMarket"></div></div>
+                        <div class="bar-value" id="valueMarket">20%</div>
                     </div>
-                    <div class="stage-row">
-                        <span>People</span>
-                        <div class="stage-bar"><div class="stage-fill" id="fill-people"></div></div>
-                        <div class="stage-value" id="value-people">40%</div>
+                    <div class="stage-bar">
+                        <label>People</label>
+                        <div class="bar-track"><div class="bar-fill" id="barPeople"></div></div>
+                        <div class="bar-value" id="valuePeople">40%</div>
                     </div>
                 </div>
             </div>
@@ -460,178 +655,207 @@
 
         <div class="divider"></div>
 
-        <section>
-            <div class="section-heading">
-                <div class="label">Score Signals</div>
-                <h2>Interpret your fundability score with precision.</h2>
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">From score to strategy.</div>
+                <p>The gauge simulates your current fundability threshold for the selected stage. CAMP turns the number into action: what investors will think and what you should do next.</p>
             </div>
-            <div class="score-grid">
-                <article class="score-card">
-                    <div class="score-label">75+</div>
-                    <p>Investment ready. You track the patterns that lead to term sheets. Expect partner interviews and swift moves to paper.</p>
-                </article>
-                <article class="score-card">
-                    <div class="score-label">60-74</div>
-                    <p>Promising territory. Close the gaps CAMP highlights before spending relationship capital on meetings.</p>
-                </article>
-                <article class="score-card">
-                    <div class="score-label">45-59</div>
-                    <p>Mixed signals. Investors will stall unless you move key metrics—CAMP lists the order of operations.</p>
-                </article>
-                <article class="score-card">
-                    <div class="score-label">&lt;45</div>
-                    <p>Foundational work ahead. Focus on traction proof points before returning to the market.</p>
-                </article>
+            <div class="gauge-grid">
+                <div class="score-gauge" aria-hidden="true">
+                    <svg viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" stroke="rgba(5,5,5,0.08)" stroke-width="14" fill="none"/>
+                        <circle id="gaugeTrack" cx="80" cy="80" r="70" stroke="rgba(5,5,5,0.16)" stroke-width="14" fill="none" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+                        <circle id="gaugeFill" cx="80" cy="80" r="70" stroke="#050505" stroke-width="14" fill="none" stroke-linecap="round" transform="rotate(-90 80 80)" stroke-dasharray="439" stroke-dashoffset="439"/>
+                    </svg>
+                    <div class="score-label">Target<br><strong id="scoreValue">78</strong></div>
+                </div>
+                <div class="score-copy" id="scoreNarrative">Investment ready territory. Expect partner interviews, diligence acceleration, and a rapid path to terms when you sustain these signals for six weeks.</div>
             </div>
         </section>
 
         <div class="divider"></div>
 
-        <section>
-            <div class="section-heading">
-                <div class="label">Pattern Intelligence</div>
-                <h2>How founders use CAMP inside Flash.</h2>
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">System patterns.</div>
+                <p>A sample of the live feed our partners see. We track founders improving their CAMP scores in near real-time, and surface the moves that matter.</p>
             </div>
-            <div class="data-grid">
-                <div class="radar-shell">
-                    <canvas id="radarCanvas" class="radar-canvas" aria-hidden="true"></canvas>
+            <div class="pattern-feed">
+                <div class="feed-header">
+                    <div class="label">Live Intelligence</div>
+                    <div class="label">Auto-refreshed</div>
                 </div>
-                <div class="insight-list">
-                    <div class="insight-item">
-                        <span>Rapid Iteration</span>
-                        <p>Top quartile founders re-run CAMP every 14 days to track progress and unlock higher score thresholds.</p>
-                    </div>
-                    <div class="insight-item">
-                        <span>Portfolio Edge</span>
-                        <p>Companies lifted fundability by an average of 18 points before raising their next round with us.</p>
-                    </div>
-                    <div class="insight-item">
-                        <span>Feedback Loop</span>
-                        <p>Each score delivers five specific reasons investors would pass today and the playbook to change the answer.</p>
-                    </div>
+                <div class="feed-track" id="feedTrack">
+                    <div class="feed-items" id="feedItems"></div>
                 </div>
             </div>
         </section>
 
         <footer>© 2025 Flash. All rights reserved.</footer>
-    </div>
+    </main>
 
     <script>
-        const stageData = {
-            preseed: {
-                label: 'Pre-Seed Focus',
-                weights: { capital: 10, advantage: 30, market: 20, people: 40 }
+        const pillarMap = {
+            capital: {
+                title: 'Capital — financial discipline',
+                summary: 'CAMP reads the precision of your capital usage: burn efficiency, runway resilience, and investor quality. Strong marks tell us every dollar knows what it is doing.',
+                metrics: [
+                    'Runway scenarios, burn multiple, capital efficiency',
+                    'Signal quality of investors already on the cap table',
+                    'Flexibility to scale spend without breaking fundamentals'
+                ]
             },
-            seed: {
-                label: 'Seed Focus',
-                weights: { capital: 15, advantage: 30, market: 25, people: 30 }
+            advantage: {
+                title: 'Advantage — compounding edge',
+                summary: 'We analyse moats other founders can’t copy tomorrow—proprietary data, switching costs, network effects, and defensibility that gains strength over time.',
+                metrics: [
+                    'Depth of proprietary technology and IP posture',
+                    'Data loops and insight flywheels as customers grow',
+                    'Evidence that price power increases with adoption'
+                ]
             },
-            seriesa: {
-                label: 'Series A Focus',
-                weights: { capital: 25, advantage: 25, market: 30, people: 20 }
+            market: {
+                title: 'Market — scale and urgency',
+                summary: 'Great teams in the wrong pond never scale. CAMP validates your TAM, velocity, retention, and whether urgency exists for the problem you solve.',
+                metrics: [
+                    'Segment velocity, expansion rate, and net retention',
+                    'Customer urgency measured via engagement depth',
+                    'Competitive density and share capture momentum'
+                ]
             },
-            seriesb: {
-                label: 'Series B+ Focus',
-                weights: { capital: 35, advantage: 20, market: 30, people: 15 }
+            people: {
+                title: 'People — execution gravity',
+                summary: 'The system looks at founder-market fit, operating cadence, and the team’s ability to translate insight into shipped product.',
+                metrics: [
+                    'Iteration speed, shipping frequency, postmortem velocity',
+                    'Hiring magnetism and the calibre of advisors on call',
+                    'Founder narrative: motivation, insight, resilience'
+                ]
             }
         };
 
-        const chips = Array.from(document.querySelectorAll('.stage-chip'));
-        const stageLabel = document.getElementById('stage-label');
-        const fills = {
-            capital: document.getElementById('fill-capital'),
-            advantage: document.getElementById('fill-advantage'),
-            market: document.getElementById('fill-market'),
-            people: document.getElementById('fill-people')
-        };
-        const values = {
-            capital: document.getElementById('value-capital'),
-            advantage: document.getElementById('value-advantage'),
-            market: document.getElementById('value-market'),
-            people: document.getElementById('value-people')
-        };
+        const pillarButtons = Array.from(document.querySelectorAll('.pillar-button'));
+        const pillarTitle = document.getElementById('pillarTitle');
+        const pillarSummary = document.getElementById('pillarSummary');
+        const pillarMetrics = document.getElementById('pillarMetrics');
 
-        function setStage(key) {
-            const stage = stageData[key];
-            if (!stage) return;
-            stageLabel.textContent = stage.label;
-            Object.entries(stage.weights).forEach(([pillar, weight]) => {
-                if (fills[pillar]) {
-                    fills[pillar].style.width = weight + '%';
-                }
-                if (values[pillar]) {
-                    values[pillar].textContent = weight + '%';
-                }
+        function setPillar(key) {
+            const pillar = pillarMap[key];
+            if (!pillar) return;
+            pillarButtons.forEach(btn => {
+                const active = btn.dataset.pillar === key;
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-selected', active ? 'true' : 'false');
             });
-            chips.forEach(chip => {
-                const isActive = chip.dataset.stage === key;
-                chip.classList.toggle('active', isActive);
-                chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            });
+            pillarTitle.textContent = pillar.title;
+            pillarSummary.textContent = pillar.summary;
+            pillarMetrics.innerHTML = pillar.metrics.map(item => `<li>${item}</li>`).join('');
         }
 
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => setStage(chip.dataset.stage));
-            chip.addEventListener('keydown', (event) => {
+        pillarButtons.forEach(btn => {
+            btn.addEventListener('click', () => setPillar(btn.dataset.pillar));
+            btn.addEventListener('keydown', event => {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    setStage(chip.dataset.stage);
+                    setPillar(btn.dataset.pillar);
                 }
             });
         });
 
-        setStage('preseed');
+        setPillar('capital');
 
-        const canvas = document.getElementById('radarCanvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            const size = canvas.clientWidth;
-            canvas.width = size;
-            canvas.height = size;
-            drawRadar();
-        }
-
-        function drawRadar() {
-            const size = canvas.width;
-            const center = size / 2;
-            const radius = size * 0.38;
-            const axes = ['Capital', 'Advantage', 'Market', 'People'];
-            const data = [0.62, 0.78, 0.54, 0.70];
-
-            ctx.clearRect(0, 0, size, size);
-            ctx.strokeStyle = 'rgba(0,0,0,0.08)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            for (let i = 0; i < axes.length; i++) {
-                const angle = (Math.PI * 2 / axes.length) * i - Math.PI / 2;
-                const x = center + Math.cos(angle) * radius;
-                const y = center + Math.sin(angle) * radius;
-                ctx.moveTo(center, center);
-                ctx.lineTo(x, y);
+        const stageDefinitions = [
+            {
+                label: 'Pre-Seed Focus',
+                weights: { capital: 10, advantage: 30, market: 20, people: 40 },
+                score: 68,
+                narrative: 'Momentum is people-first. Investors want to see a team that out-executes and the beginnings of a moat. Use CAMP to sharpen the story before your first lead meeting.'
+            },
+            {
+                label: 'Seed Focus',
+                weights: { capital: 15, advantage: 30, market: 25, people: 30 },
+                score: 74,
+                narrative: 'Proof is forming. Advantage and market validation climb; founders who instrument their pipeline and efficiency move from curiosity to conviction.'
+            },
+            {
+                label: 'Series A Focus',
+                weights: { capital: 25, advantage: 25, market: 30, people: 20 },
+                score: 81,
+                narrative: 'It is time to dominate the segment. Investors expect scale mechanics and clean unit economics. CAMP highlights where efficiency must tighten before term sheets arrive.'
+            },
+            {
+                label: 'Series B+ Focus',
+                weights: { capital: 35, advantage: 20, market: 30, people: 15 },
+                score: 87,
+                narrative: 'Operational mastery is the expectation. Capital efficiency, market control, and an enduring edge determine whether the next round leads or follows.'
             }
-            ctx.stroke();
+        ];
 
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0,0,0,0.16)';
-            ctx.fillStyle = 'rgba(0,0,0,0.05)';
-            data.forEach((value, index) => {
-                const angle = (Math.PI * 2 / data.length) * index - Math.PI / 2;
-                const x = center + Math.cos(angle) * radius * value;
-                const y = center + Math.sin(angle) * radius * value;
-                if (index === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+        const stageRange = document.getElementById('stageRange');
+        const barCapital = document.getElementById('barCapital');
+        const barAdvantage = document.getElementById('barAdvantage');
+        const barMarket = document.getElementById('barMarket');
+        const barPeople = document.getElementById('barPeople');
+        const valueCapital = document.getElementById('valueCapital');
+        const valueAdvantage = document.getElementById('valueAdvantage');
+        const valueMarket = document.getElementById('valueMarket');
+        const valuePeople = document.getElementById('valuePeople');
+        const scoreValue = document.getElementById('scoreValue');
+        const scoreNarrative = document.getElementById('scoreNarrative');
+        const gaugeFill = document.getElementById('gaugeFill');
+
+        const circumference = 2 * Math.PI * 70; // matches svg radius 70
+        gaugeFill.setAttribute('stroke-dasharray', circumference);
+
+        function setStage(index) {
+            const def = stageDefinitions[index] || stageDefinitions[0];
+            const { weights, score, narrative, label } = def;
+            barCapital.style.width = weights.capital + '%';
+            barAdvantage.style.width = weights.advantage + '%';
+            barMarket.style.width = weights.market + '%';
+            barPeople.style.width = weights.people + '%';
+            valueCapital.textContent = `${weights.capital}%`;
+            valueAdvantage.textContent = `${weights.advantage}%`;
+            valueMarket.textContent = `${weights.market}%`;
+            valuePeople.textContent = `${weights.people}%`;
+            scoreValue.textContent = score;
+            scoreNarrative.textContent = narrative;
+            document.getElementById('stage-label').textContent = label;
+
+            const progress = Math.min(Math.max(score, 0), 100) / 100;
+            const offset = circumference - circumference * progress;
+            gaugeFill.setAttribute('stroke-dashoffset', offset);
         }
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        // stage-label element resides in metrics panel header
+        stageRange.addEventListener('input', event => {
+            const value = Number(event.target.value);
+            setStage(value);
+        });
+
+        setStage(0);
+
+        const feedData = [
+            { title: 'Founder cadence ↑', body: 'Loopstream shifted to weekly product drops, boosting People score by 18 points in a month.' },
+            { title: 'Burn multiple reset', body: 'InsightGrid cut burn multiple from 4.8× to 2.1×, pushing Capital into investable range.' },
+            { title: 'Moat compounding', body: 'SynthAI now ships synthetic datasets as a service—Advantage score crosses 80.' },
+            { title: 'Retention signal', body: 'Finlink hit 140% net revenue retention. Market pillar recalibrated to late-stage weighting.' },
+            { title: 'Score unlocked', body: 'Three founders cleared 75 this week and unlocked FLASH Fund interviews.' }
+        ];
+
+        const feedItems = document.getElementById('feedItems');
+        feedItems.innerHTML = feedData.concat(feedData).map(item => `
+            <div class="feed-item"><strong>${item.title}</strong>${item.body}</div>
+        `).join('');
+
+        // Pause animation on hover for readability
+        const feedTrack = document.getElementById('feedTrack');
+        feedTrack.addEventListener('mouseenter', () => {
+            feedItems.style.animationPlayState = 'paused';
+        });
+        feedTrack.addEventListener('mouseleave', () => {
+            feedItems.style.animationPlayState = 'running';
+        });
     </script>
 </body>
 </html>
