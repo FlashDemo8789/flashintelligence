@@ -133,9 +133,10 @@
 
         .orb {
             position: relative;
-            width: min(360px, 60vw);
+            width: clamp(220px, 45vw, 320px);
             aspect-ratio: 1;
             margin: 0 auto;
+            overflow: hidden;
         }
 
         .halo,
@@ -415,9 +416,9 @@
 
         .gauge {
             position: relative;
-            width: min(280px, 58vw);
+            width: clamp(220px, 45vw, 260px);
             aspect-ratio: 1;
-            margin: 0 auto;
+            margin: 28px auto 0;
         }
 
         .gauge svg {
@@ -560,6 +561,10 @@
 
             .back {
                 padding: 12px 20px;
+            }
+
+            .gauge {
+                margin-top: 40px;
             }
         }
     </style>
