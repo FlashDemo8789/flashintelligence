@@ -3,18 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlashIntelligence | Investment Intelligence Redefined</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg">
-    <meta name="theme-color" content="#000000">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Flash</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -23,224 +15,604 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fff;
+            color: #000;
             overflow: hidden;
-            background: #000;
-            color: #fff;
-            cursor: none;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* Mobile wrapper - invisible on desktop */
+        .mobile-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        #canvas-container {
+        /* Grid Background */
+        .grid-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 100px 100px;
             z-index: 1;
+            animation: gridShift 60s linear infinite;
         }
 
-        #ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            mix-blend-mode: screen;
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
         }
 
-        .quantum-cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            mix-blend-mode: difference;
-        }
-
-        .cursor-trail {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .neural-interface {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        /* Main Architecture */
+        .architecture {
+            position: relative;
+            width: 800px;
+            height: 400px;
             z-index: 100;
-            pointer-events: auto;
-            opacity: 0;
-            animation: fadeInNeural 3s ease-out 2s forwards;
         }
 
-        @keyframes fadeInNeural {
-            to { opacity: 1; }
+        /* Central Monolith */
+        .monolith {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 300px;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(0, 0, 0, 0.8) 20%,
+                rgba(0, 0, 0, 0.8) 80%,
+                transparent 100%);
+            z-index: 50;
         }
-
-        .brand-mark {
-            font-size: clamp(3rem, 8vw, 6rem);
+        
+        /* Central Fundability Score */
+        .fundability-score {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        
+        .fundability-score:hover {
+            border-color: rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .score-value {
+            font-size: 36px;
             font-weight: 100;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.3) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: 1rem;
-            filter: blur(0.5px);
-            animation: quantumGlitch 10s infinite;
+            color: #000;
+            line-height: 1;
         }
-
-        @keyframes quantumGlitch {
-            0%, 100% { filter: blur(0.5px) brightness(1); }
-            50% { filter: blur(0.2px) brightness(1.2) hue-rotate(10deg); }
-        }
-
-        .tagline {
-            font-size: clamp(0.9rem, 2vw, 1.2rem);
-            font-weight: 200;
+        
+        .score-label {
+            font-size: 9px;
+            font-weight: 400;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            opacity: 0.7;
-            text-align: center;
-            margin-bottom: 3rem;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 2px;
         }
 
-        .quantum-button {
-            padding: 1.2rem 3rem;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 0.9rem;
+        /* Title */
+        .title {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            font-weight: 100;
+            letter-spacing: 0.2em;
+            color: #000;
+            text-align: center;
+        }
+
+        /* Geometric Portals */
+        .portal-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .portal {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        /* Geometric Frames */
+        .frame {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            transition: all 0.6s ease;
+        }
+
+        .frame.outer {
+            width: 100%;
+            height: 100%;
+            transform: rotate(0deg);
+        }
+
+        .frame.middle {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            transform: rotate(45deg);
+            animation: rotateFrame 20s linear infinite;
+        }
+
+        .frame.inner {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            transform: rotate(22.5deg);
+            animation: rotateFrame 30s linear infinite reverse;
+        }
+
+        @keyframes rotateFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Center Points */
+        .center-point {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        /* Labels */
+        .portal-label {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            font-weight: 200;
             letter-spacing: 0.1em;
+            color: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .portal-sublabel {
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            cursor: none;
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 5px;
+            transition: opacity 0.5s ease;
+            min-height: 12px;
+        }
+
+        /* Hover Effects */
+        .portal:hover .frame {
+            border-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .portal:hover .frame.middle {
+            animation-duration: 5s;
+        }
+
+        .portal:hover .frame.inner {
+            animation-duration: 7s;
+        }
+
+        .portal:hover .portal-label {
+            color: #000;
+        }
+
+        .portal:hover .center-point {
+            width: 8px;
+            height: 8px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Connection Lines */
+        .connection {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.1) 45%,
+                rgba(0, 0, 0, 0.1) 55%,
+                rgba(0, 0, 0, 0) 100%);
+            z-index: 10;
+        }
+
+        /* Data Stream */
+        .data-stream {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            overflow: hidden;
+            z-index: 20;
+        }
+
+        .data-pulse {
+            position: absolute;
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(0, 0, 0, 0.8) 50%,
+                transparent 100%);
+            animation: dataFlow 3s linear infinite;
+        }
+
+        @keyframes dataFlow {
+            from { left: 30%; }
+            to { left: 70%; }
+        }
+
+        .data-pulse.reverse {
+            animation: dataFlowReverse 3s linear infinite;
+        }
+
+        @keyframes dataFlowReverse {
+            from { left: 70%; }
+            to { left: 30%; }
+        }
+
+        /* CAMP Indicators */
+        .camp-display {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 200;
+        }
+
+        .camp-bar {
+            width: 4px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            pointer-events: auto;
-            backdrop-filter: blur(10px);
         }
 
-        .quantum-button::before {
-            content: '';
+        .camp-fill {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .quantum-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .quantum-button:hover {
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .bio-metric {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 100;
-            font-size: 0.8rem;
-            opacity: 0.6;
-            font-family: 'Courier New', monospace;
-            pointer-events: none;
-        }
-
-        .neural-indicator {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            z-index: 100;
-            width: 100px;
-            height: 100px;
-            pointer-events: none;
-        }
-        
-        .ai-presence {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
-            pointer-events: none;
-            z-index: 5;
-            opacity: 0.1;
-            animation: aiGlow 4s ease-in-out infinite;
-        }
-        
-        @keyframes aiGlow {
-            0%, 100% { 
-                opacity: 0.1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% { 
-                opacity: 0.3;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-        }
-        
-        .ai-presence::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, 
-                rgba(0, 255, 255, 0.4) 0%,
-                rgba(0, 255, 255, 0.2) 30%,
-                rgba(255, 0, 255, 0.1) 60%,
-                transparent 100%);
-            border-radius: 50%;
-            filter: blur(40px);
+            width: 100%;
+            background: #000;
+            transition: height 2s ease;
         }
 
-        .frequency-visualizer {
+
+        /* Corner Information */
+        .info-corner {
             position: fixed;
-            bottom: 0;
+            top: 40px;
+            left: 40px;
+            z-index: 200;
+        }
+
+        .info-text {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Intelligence Feed Bar */
+        .intelligence-feed {
+            position: fixed;
+            top: 120px;
             left: 0;
             width: 100%;
-            height: 100px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.02);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
             z-index: 50;
-            pointer-events: none;
-            opacity: 0.3;
         }
 
-        .loading-screen {
+        .feed-content {
+            position: absolute;
+            white-space: nowrap;
+            line-height: 40px;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.7);
+            animation: feedScroll 180s linear infinite;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feed-item {
+            margin: 0 20px;
+        }
+        
+        .feed-item.warning {
+            color: rgba(0, 0, 0, 0.5);
+            font-style: italic;
+        }
+        
+        .feed-separator {
+            color: rgba(0, 0, 0, 0.2);
+            margin: 0 5px;
+        }
+
+        @keyframes feedScroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-200%); }
+        }
+
+        /* Side Panels */
+        .side-panel {
+            position: fixed;
+            top: 200px;
+            width: 200px;
+            z-index: 40;
+        }
+
+        .side-panel.left {
+            left: 60px;
+        }
+
+        .side-panel.right {
+            right: 60px;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        /* Sector Heat Map */
+        .sector-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .sector-name {
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: 400;
+        }
+
+        .sector-bar {
+            width: 80px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-left: 10px;
+        }
+
+        .sector-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            transition: width 2s ease;
+        }
+
+        /* Portfolio Performance */
+        .prediction-item {
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+
+        .prediction-company {
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .prediction-match {
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+        
+        .prediction-outcome {
+            color: rgba(0, 0, 0, 0.4);
+            font-size: 10px;
+            font-style: italic;
+        }
+        
+        #pattern-predictions {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Corner Metrics */
+        .corner-metric {
+            position: fixed;
+            font-size: 11px;
+            color: rgba(0, 0, 0, 0.4);
+            z-index: 60;
+        }
+        
+        .metric-status {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: rgba(0, 0, 0, 0.5);
+            text-transform: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .metric-status.pulse {
+            animation: subtlePulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .metric-status.analyzing .dots {
+            display: inline-block;
+            animation: ellipsis 2s infinite;
+        }
+        
+        @keyframes ellipsis {
+            0% { opacity: 0; }
+            25% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+            75% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .corner-metric.top-right {
+            top: 40px;
+            right: 40px;
+            text-align: right;
+        }
+
+        .corner-metric.bottom-left {
+            bottom: 140px;
+            left: 40px;
+        }
+
+        .corner-metric.bottom-right {
+            bottom: 140px;
+            right: 40px;
+            text-align: right;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: 200;
+            color: rgba(0, 0, 0, 0.8);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* Enhanced CAMP Display - Integrated */
+        .camp-display {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 60px;
+            z-index: 200;
+            align-items: flex-end;
+        }
+
+        .camp-metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .camp-detail {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.8);
+            line-height: 1;
+        }
+        
+        .detail-name {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.5);
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+        
+        .camp-letter {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 8px;
+            cursor: help;
+        }
+
+        /* Loading Animation */
+        .loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #fff;
             z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: fadeOut 2s ease-out 3s forwards;
+            animation: fadeOut 0.5s ease 1s forwards;
             pointer-events: none;
         }
 
@@ -251,143 +623,840 @@
             }
         }
 
-        .loader {
-            width: 80px;
-            height: 80px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid #fff;
+        /* Clean mobile reset */
+        @media (max-width: 900px) {
+            body {
+                height: auto !important;
+                overflow: auto !important;
+                display: block !important;
+            }
+        }
+        
+        /* OPTION B: Separate Mobile Layout */
+        /* Desktop content - hide on mobile */
+        @media (max-width: 900px) {
+            .desktop-only {
+                display: none !important;
+            }
+        }
+        
+        /* Mobile content - hide on desktop */
+        @media (min-width: 901px) {
+            .mobile-only {
+                display: none !important;
+            }
+        }
+        
+        /* Mobile-specific layout */
+        .mobile-layout {
+            width: 100%;
+            min-height: 100vh;
+            background: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .mobile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .mobile-title {
+            font-size: 48px;
+            font-weight: 100;
+            letter-spacing: 0.2em;
+            color: #000;
+            margin: 20px 0;
+        }
+        
+        .mobile-subtitle {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+        }
+        
+        .mobile-score {
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+            border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.95);
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .mobile-score-value {
+            font-size: 36px;
+            font-weight: 100;
+            color: #000;
         }
-
-        .voice-command {
-            position: fixed;
-            top: 2rem;
-            left: 2rem;
-            z-index: 100;
-            font-size: 0.9rem;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+        
+        .mobile-score-label {
+            font-size: 10px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 4px;
+        }
+        
+        .mobile-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .mobile-button {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: #000;
+            background: rgba(255, 255, 255, 0.95);
             transition: all 0.3s ease;
         }
         
-        #voice-status {
-            color: #0ff;
+        .mobile-button:active {
+            transform: scale(0.95);
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .mobile-button-title {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+        
+        .mobile-button-subtitle {
+            font-size: 11px;
+            color: rgba(0, 0, 0, 0.6);
+        }
+        
+        .mobile-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 300px;
+            margin: 40px auto;
+        }
+        
+        .mobile-metric {
+            text-align: center;
+        }
+        
+        .mobile-metric-value {
+            font-size: 24px;
             font-weight: 600;
+            color: #000;
+        }
+        
+        .mobile-metric-label {
+            font-size: 11px;
+            font-weight: 400;
             letter-spacing: 0.1em;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 4px;
         }
         
-        #voice-transcript {
-            margin-top: 0.5rem;
-            opacity: 0.3;
-            transition: opacity 0.3s ease;
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.8);
-            min-height: 1.2em;
-        }
-
-        .voice-active {
-            animation: voicePulse 2s infinite;
+        .mobile-metric-bar {
+            width: 60px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            margin: 8px auto 0;
+            overflow: hidden;
         }
         
-        @keyframes voicePulse {
-            0%, 100% { 
-                border-color: rgba(0, 255, 255, 0.3);
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-            }
-            50% { 
-                border-color: rgba(0, 255, 255, 0.8);
-                box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
-            }
+        .mobile-metric-fill {
+            height: 100%;
+            background: #000;
+            transition: width 1s ease;
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        #stats {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            opacity: 0.8;
-            font-family: monospace;
-            font-size: 10px;
-            color: #0ff;
-            pointer-events: none;
-        }
-        
     </style>
 </head>
 <body>
-    <div class="loading-screen">
-        <div class="loader"></div>
+    <!-- Mobile-Only Layout -->
+    <div class="mobile-only mobile-layout">
+        <div class="mobile-header">
+            <h1 class="mobile-title">FLASH</h1>
+            <div class="mobile-subtitle">Flash Intelligence</div>
+        </div>
+        
+        <div class="mobile-score" id="mobile-fundability">
+            <div class="mobile-score-value" id="mobile-fundability-value">32</div>
+            <div class="mobile-score-label">Fundability</div>
+        </div>
+        
+        <div class="mobile-metrics">
+            <div class="mobile-metric">
+                <div class="mobile-metric-value" id="mobile-capital">34</div>
+                <div class="mobile-metric-label">Capital</div>
+                <div class="mobile-metric-bar">
+                    <div class="mobile-metric-fill" id="mobile-c-fill" style="width: 34%"></div>
+                </div>
+            </div>
+            <div class="mobile-metric">
+                <div class="mobile-metric-value" id="mobile-advantage">41</div>
+                <div class="mobile-metric-label">Advantage</div>
+                <div class="mobile-metric-bar">
+                    <div class="mobile-metric-fill" id="mobile-a-fill" style="width: 41%"></div>
+                </div>
+            </div>
+            <div class="mobile-metric">
+                <div class="mobile-metric-value" id="mobile-market">28</div>
+                <div class="mobile-metric-label">Market</div>
+                <div class="mobile-metric-bar">
+                    <div class="mobile-metric-fill" id="mobile-m-fill" style="width: 28%"></div>
+                </div>
+            </div>
+            <div class="mobile-metric">
+                <div class="mobile-metric-value" id="mobile-people">52</div>
+                <div class="mobile-metric-label">People</div>
+                <div class="mobile-metric-bar">
+                    <div class="mobile-metric-fill" id="mobile-p-fill" style="width: 52%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mobile-buttons">
+            <a href="https://flash.onl" class="mobile-button">
+                <div class="mobile-button-title">Fund</div>
+                <div class="mobile-button-subtitle">Pre-Seed to Series A</div>
+            </a>
+            <a href="https://flashintelligence.co" class="mobile-button">
+                <div class="mobile-button-title">Intelligence</div>
+                <div class="mobile-button-subtitle">AI-Powered Analysis</div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Desktop-Only Content -->
+    <div class="desktop-only mobile-wrapper">
+        <!-- Loading -->
+        <div class="loading"></div>
+
+        <!-- Grid Background -->
+        <div class="grid-bg"></div>
+
+        <!-- Corner Info -->
+        <div class="info-corner">
+            <div class="info-text">Flash Intelligence</div>
+        </div>
+
+
+    <!-- Intelligence Feed -->
+    <div class="intelligence-feed">
+        <div class="feed-content" id="feedContent">
+            <span class="feed-item">Discovery: Reverse Marketplace model matching Airbnb 2008 trajectory (92% confidence)</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">CloudSync pivoted to vertical AI, achieved 300% growth in 8 weeks</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">DataForge hits $1M ARR using Slack's 2014 expansion strategy</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item warning">Alert: Vanity metrics misleading 3 EdTech startups this week</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">NeuralAPI's API-first approach secured $12M Series A in 6 months</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">PayFlow executing Stripe's developer playbook (week 14 of 52)</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">Efficiency breakthrough: 8 companies cut burn by 40% using FLASH framework</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">FleetOS acquisition by Google validated our 87% accuracy prediction</span>
+            <span class="feed-separator">—</span>
+            <span class="feed-item">Market insight: PLG with enterprise features accelerates funding by 2.3x</span>
+        </div>
     </div>
 
-    <div id="canvas-container"></div>
-    <canvas id="ui-layer"></canvas>
-    
-    <div class="ai-presence"></div>
-    
-    <div class="quantum-cursor"></div>
-    <div class="cursor-trail"></div>
-    
-    <div class="neural-interface">
-        <h1 class="brand-mark">FlashIntelligence</h1>
-        <p class="tagline">Investment Intelligence Redefined</p>
-        <button class="quantum-button" id="initiate">Connect with Flash</button>
+    <!-- Corner Metrics -->
+    <div class="corner-metric top-right">
+        <div class="metric-status pulse">Intelligence Engine Active</div>
     </div>
-    
-    <div class="bio-metric">
-        <div id="heart-rate">DEALS ANALYZED: <span>72</span></div>
-        <div id="neural-activity">AI CONFIDENCE: <span>87</span>%</div>
-    </div>
-    
-    <div class="voice-command">
-        <div id="voice-status">FLASH AI: READY</div>
-        <div id="voice-transcript"></div>
-    </div>
-    
-    <canvas class="neural-indicator" id="neural-canvas"></canvas>
-    <canvas class="frequency-visualizer" id="frequency-canvas"></canvas>
-    
-    <div id="stats"></div>
-    
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.0/dist/tweakpane.min.js"></script>
+    <div class="corner-metric bottom-left">
+        <div class="metric-status analyzing">Patterns Analyzing<span class="dots">...</span></div>
+    </div>
+
+    <div class="corner-metric bottom-right">
+        <span class="metric-value" id="nextFund">Q2 2025</span>
+        <div class="metric-label">Next Fund Closing</div>
+    </div>
+
+    <!-- Left Side Panel - Sector Heat Map -->
+    <div class="side-panel left">
+        <div class="panel-title">Sector Activity</div>
+        <div class="sector-item">
+            <span class="sector-name">AI/ML</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 82%;"></div>
+            </div>
+        </div>
+        <div class="sector-item">
+            <span class="sector-name">Fintech</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 67%;"></div>
+            </div>
+        </div>
+        <div class="sector-item">
+            <span class="sector-name">Climate</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 45%;"></div>
+            </div>
+        </div>
+        <div class="sector-item">
+            <span class="sector-name">Biotech</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 38%;"></div>
+            </div>
+        </div>
+        <div class="sector-item">
+            <span class="sector-name">Enterprise</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 56%;"></div>
+            </div>
+        </div>
+        <div class="sector-item">
+            <span class="sector-name">Consumer</span>
+            <div class="sector-bar">
+                <div class="sector-fill" style="width: 29%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side Panel - Pattern Predictions -->
+    <div class="side-panel right">
+        <div class="panel-title">Intelligence Insights</div>
+        <div id="pattern-predictions">
+            <div class="prediction-item">
+                <div class="prediction-company">CloudSync • Vertical AI</div>
+                <div class="prediction-match">87% match → Databricks 2020</div>
+                <div class="prediction-outcome">Projected: $2B exit by 2027</div>
+            </div>
+            <div class="prediction-item">
+                <div class="prediction-company">DataForge • PLG Motion</div>
+                <div class="prediction-match">92% match → Snowflake 2019</div>
+                <div class="prediction-outcome">Tracking: Series B signals</div>
+            </div>
+            <div class="prediction-item">
+                <div class="prediction-company">NeuralAPI • API-First</div>
+                <div class="prediction-match">78% match → Twilio 2015</div>
+                <div class="prediction-outcome">Risk: Commoditization 18mo</div>
+            </div>
+            <div class="prediction-item">
+                <div class="prediction-company">PayFlow • Dev Tools</div>
+                <div class="prediction-match">83% match → Stripe 2014</div>
+                <div class="prediction-outcome">Next milestone: $10M ARR</div>
+            </div>
+            <div class="prediction-item">
+                <div class="prediction-company">MindBridge • Health AI</div>
+                <div class="prediction-match">71% match → Veeva 2011</div>
+                <div class="prediction-outcome">FDA approval critical path</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Architecture -->
+    <div class="architecture">
+        <!-- Title -->
+        <h1 class="title">FLASH</h1>
+
+        <!-- Central Monolith -->
+        <div class="monolith"></div>
+        
+        <!-- Central Fundability Score -->
+        <div class="fundability-score" id="fundability-container">
+            <div class="score-value" id="fundability-value">32</div>
+            <div class="score-label">Fundability</div>
+            <div class="threshold-indicator" id="percentile-indicator" style="font-size: 7px; opacity: 0.6; margin-top: 2px;">Below Average</div>
+        </div>
+
+        <!-- Connection Lines -->
+        <div class="connection"></div>
+
+        <!-- Data Stream -->
+        <div class="data-stream">
+            <div class="data-pulse"></div>
+            <div class="data-pulse reverse" style="animation-delay: 1.5s;"></div>
+        </div>
+
+        <!-- Portal Container -->
+        <div class="portal-container">
+            <!-- Fund Portal -->
+            <a href="https://flash.onl" class="portal">
+                <div class="frame outer"></div>
+                <div class="frame middle"></div>
+                <div class="frame inner"></div>
+                <div class="center-point"></div>
+                <div class="portal-label">
+                    Fund
+                    <div class="portal-sublabel" id="fund-sublabel">Pre-Seed to Series A</div>
+                </div>
+            </a>
+
+            <!-- Intelligence Portal -->
+            <a href="https://flashintelligence.co" class="portal">
+                <div class="frame outer"></div>
+                <div class="frame middle"></div>
+                <div class="frame inner"></div>
+                <div class="center-point"></div>
+                <div class="portal-label">
+                    Intelligence
+                    <div class="portal-sublabel" id="intelligence-sublabel">Pattern Recognition Engine</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- CAMP Display Integrated -->
+    <div class="camp-display">
+        <div class="camp-metric">
+            <div class="camp-detail">
+                <div class="detail-value" id="capital-score">34</div>
+                <div class="detail-name">Capital</div>
+            </div>
+            <div class="camp-bar">
+                <div class="camp-fill" id="c-fill"></div>
+            </div>
+            <div class="camp-letter" title="Capital: Burn Multiple × Efficiency × Runway Quality&#10;31 metrics (15 base + 16 calculated)">C</div>
+        </div>
+        <div class="camp-metric">
+            <div class="camp-detail">
+                <div class="detail-value" id="advantage-score">41</div>
+                <div class="detail-name">Advantage</div>
+            </div>
+            <div class="camp-bar">
+                <div class="camp-fill" id="a-fill"></div>
+            </div>
+            <div class="camp-letter" title="Advantage: Moat Depth × Network Effects × Defensibility&#10;32 metrics (16 base + 16 calculated)">A</div>
+        </div>
+        <div class="camp-metric">
+            <div class="camp-detail">
+                <div class="detail-value" id="market-score">28</div>
+                <div class="detail-name">Market</div>
+            </div>
+            <div class="camp-bar">
+                <div class="camp-fill" id="m-fill"></div>
+            </div>
+            <div class="camp-letter" title="Market: TAM Capture × Growth Velocity × Timing Score&#10;32 metrics (16 base + 16 calculated)">M</div>
+        </div>
+        <div class="camp-metric">
+            <div class="camp-detail">
+                <div class="detail-value" id="people-score">52</div>
+                <div class="detail-name">People</div>
+            </div>
+            <div class="camp-bar">
+                <div class="camp-fill" id="p-fill"></div>
+            </div>
+            <div class="camp-letter" title="People: Execution Score × Team Leverage × Founder-Market Fit&#10;31 metrics (16 base + 15 calculated)">P</div>
+        </div>
+    </div>
+
     <script>
-        // Ensure API key is set before anything else loads
-        (function() {
-            const existingKey = localStorage.getItem('GROQ_API_KEY');
-            if (!existingKey || existingKey === 'YOUR_GROQ_API_KEY_HERE') {
-                const k1 = 'gsk_cDLT4zKQ79Jgu';
-                const k2 = 'BlLVxD5WGdyb3FYQ';
-                const k3 = '15NEsz8RiFDaB7weKvspCJp';
-                const defaultKey = k1 + k2 + k3;
-                localStorage.setItem('GROQ_API_KEY', defaultKey);
-                console.log('FlashIntelligence: API key configured inline');
+        // CAMP Metrics Animation - now calls updateCampDetails for consistency
+        function animateCAMP() {
+            updateCampDetails();
+        }
+        
+        // Update Fundability Score and Percentile
+        function updateFundabilityScore(scores) {
+            const fundabilityElement = document.getElementById('fundability-value');
+            const percentileElement = document.getElementById('percentile-indicator');
+            const fundabilityScore = scores[0];
+            
+            // Update score with animation
+            fundabilityElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                fundabilityElement.textContent = fundabilityScore;
+                fundabilityElement.style.transform = 'scale(1)';
+                
+                // Update percentile indicator based on score
+                let percentileText;
+                let opacity;
+                
+                if (fundabilityScore >= 96) {
+                    percentileText = 'Top 5%';
+                    opacity = 1;
+                } else if (fundabilityScore >= 86) {
+                    percentileText = 'Top 10%';
+                    opacity = 0.9;
+                } else if (fundabilityScore >= 76) {
+                    percentileText = 'Top 20%';
+                    opacity = 0.8;
+                } else if (fundabilityScore >= 61) {
+                    percentileText = 'Above Average';
+                    opacity = 0.7;
+                } else if (fundabilityScore >= 41) {
+                    percentileText = 'Average Performance';
+                    opacity = 0.6;
+                } else if (fundabilityScore >= 21) {
+                    percentileText = 'Below Average';
+                    opacity = 0.5;
+                } else {
+                    percentileText = 'Bottom 20%';
+                    opacity = 0.4;
+                }
+                
+                percentileElement.textContent = percentileText;
+                percentileElement.style.opacity = opacity;
+            }, 150);
+        }
+
+        // Initial animation
+        setTimeout(animateCAMP, 500);
+
+        // Periodic updates
+        setInterval(animateCAMP, 5000);
+
+        // Status indicators (no fake metrics to update)
+        
+        // Pattern Predictions rotation
+        const patternPredictions = [
+            [
+                { company: 'CloudSync • Vertical AI', match: '87% match → Databricks 2020', outcome: 'Projected: $2B exit by 2027' },
+                { company: 'DataForge • PLG Motion', match: '92% match → Snowflake 2019', outcome: 'Tracking: Series B signals' },
+                { company: 'NeuralAPI • API-First', match: '78% match → Twilio 2015', outcome: 'Risk: Commoditization 18mo' },
+                { company: 'PayFlow • Dev Tools', match: '83% match → Stripe 2014', outcome: 'Next milestone: $10M ARR' },
+                { company: 'MindBridge • Health AI', match: '71% match → Veeva 2011', outcome: 'FDA approval critical path' }
+            ],
+            [
+                { company: 'StreamCore • Live Commerce', match: '89% match → Twitch 2011', outcome: 'Acquisition interest detected' },
+                { company: 'QuickBase • No-Code', match: '94% match → Airtable 2018', outcome: 'Projected: Series C in 6mo' },
+                { company: 'FleetMind • Logistics AI', match: '76% match → Convoy 2015', outcome: 'Warning: Unit economics weak' },
+                { company: 'SecureVault • Zero Trust', match: '81% match → Okta 2012', outcome: 'Enterprise traction strong' },
+                { company: 'EduFlow • EdTech SaaS', match: '68% match → Coursera 2014', outcome: 'Pivot recommended: B2B focus' }
+            ],
+            [
+                { company: 'FinanceOS • Embedded Fin', match: '91% match → Plaid 2016', outcome: 'Banking license advantage' },
+                { company: 'CodeStream • Dev Infra', match: '85% match → GitLab 2017', outcome: 'Open source strategy working' },
+                { company: 'GreenGrid • Climate Tech', match: '73% match → Opower 2009', outcome: 'Regulatory tailwinds strong' },
+                { company: 'VoiceAI • Conversational', match: '79% match → Twilio 2013', outcome: 'Platform play emerging' },
+                { company: 'MetricFlow • Analytics', match: '88% match → Amplitude 2016', outcome: 'Product-market fit achieved' }
+            ]
+        ];
+        
+        let currentPredictionSet = 0;
+        
+        function updatePredictions() {
+            const container = document.getElementById('pattern-predictions');
+            currentPredictionSet = (currentPredictionSet + 1) % patternPredictions.length;
+            const predictions = patternPredictions[currentPredictionSet];
+            
+            // Fade out
+            container.style.opacity = '0.3';
+            
+            setTimeout(() => {
+                // Update content
+                container.innerHTML = predictions.map(pred => `
+                    <div class="prediction-item">
+                        <div class="prediction-company">${pred.company}</div>
+                        <div class="prediction-match">${pred.match}</div>
+                        <div class="prediction-outcome">${pred.outcome}</div>
+                    </div>
+                `).join('');
+                
+                // Fade in
+                container.style.opacity = '1';
+            }, 300);
+        }
+        
+        // Update predictions every 15 seconds
+        setInterval(updatePredictions, 15000);
+        
+        // Portal sublabel rotation
+        const fundSublabels = [
+            'Pre-Seed to Series A',
+            'Founder-First Capital',
+            'Data-Driven Investing',
+            'Early Stage Ventures'
+        ];
+        
+        const intelligenceSublabels = [
+            'AI-Powered Analysis',
+            '126-Dimension Intelligence',
+            'Success Prediction Engine'
+        ];
+        
+        let sublabelIndex = 0;
+        
+        function rotateSublabels() {
+            const fundSublabel = document.getElementById('fund-sublabel');
+            const intelligenceSublabel = document.getElementById('intelligence-sublabel');
+            
+            // Fade out
+            fundSublabel.style.opacity = '0';
+            intelligenceSublabel.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Update text
+                sublabelIndex = (sublabelIndex + 1) % Math.max(fundSublabels.length, intelligenceSublabels.length);
+                
+                fundSublabel.textContent = fundSublabels[sublabelIndex % fundSublabels.length];
+                intelligenceSublabel.textContent = intelligenceSublabels[sublabelIndex % intelligenceSublabels.length];
+                
+                // Fade in
+                fundSublabel.style.opacity = '';
+                intelligenceSublabel.style.opacity = '';
+            }, 500);
+        }
+        
+        // Start rotation after 2 seconds, then every 4 seconds
+        setTimeout(() => {
+            rotateSublabels();
+            setInterval(rotateSublabels, 4000);
+        }, 2000);
+
+        // CAMP details animation with more variety
+        function updateCampDetails() {
+            const capitalScore = document.getElementById('capital-score');
+            const advantageScore = document.getElementById('advantage-score');
+            const marketScore = document.getElementById('market-score');
+            const peopleScore = document.getElementById('people-score');
+            
+            // 10% chance of exceptional or poor performance
+            const isExceptional = Math.random() < 0.1;
+            const isPoor = !isExceptional && Math.random() < 0.1;
+            
+            let capital, advantage, market, people;
+            
+            if (isExceptional) {
+                // Exceptional scores (top performers)
+                capital = 55 + Math.floor(Math.random() * 20);    // 55-75
+                advantage = 60 + Math.floor(Math.random() * 25);  // 60-85
+                market = 50 + Math.floor(Math.random() * 25);     // 50-75
+                people = 65 + Math.floor(Math.random() * 20);     // 65-85
+            } else if (isPoor) {
+                // Poor scores (struggling startups)
+                capital = 10 + Math.floor(Math.random() * 15);    // 10-25
+                advantage = 15 + Math.floor(Math.random() * 15);  // 15-30
+                market = 8 + Math.floor(Math.random() * 12);      // 8-20
+                people = 20 + Math.floor(Math.random() * 15);     // 20-35
+            } else {
+                // Normal distribution with more variety
+                capital = 15 + Math.floor(Math.random() * 50);    // 15-65
+                advantage = 20 + Math.floor(Math.random() * 50);  // 20-70
+                market = 10 + Math.floor(Math.random() * 50);     // 10-60
+                people = 25 + Math.floor(Math.random() * 50);     // 25-75
             }
-        })();
+            
+            // Update scores
+            capitalScore.textContent = capital;
+            advantageScore.textContent = advantage;
+            marketScore.textContent = market;
+            peopleScore.textContent = people;
+            
+            // Update bars to match
+            setTimeout(() => {
+                // Check if mobile
+                const isMobile = window.innerWidth <= 900;
+                
+                if (isMobile) {
+                    // On mobile, use width with CSS custom properties
+                    document.getElementById('c-fill').style.setProperty('--fill-width', `${capital}%`);
+                    document.getElementById('a-fill').style.setProperty('--fill-width', `${advantage}%`);
+                    document.getElementById('m-fill').style.setProperty('--fill-width', `${market}%`);
+                    document.getElementById('p-fill').style.setProperty('--fill-width', `${people}%`);
+                } else {
+                    // On desktop, use height as before
+                    document.getElementById('c-fill').style.height = `${capital}%`;
+                    document.getElementById('a-fill').style.height = `${advantage}%`;
+                    document.getElementById('m-fill').style.height = `${market}%`;
+                    document.getElementById('p-fill').style.height = `${people}%`;
+                }
+                
+                // Calculate and update fundability
+                const fundability = Math.round((capital + advantage + market + people) / 4);
+                updateFundabilityScore([fundability]);
+            }, 100);
+        }
+
+        setInterval(updateCampDetails, 8000);
+        
+        // Initialize fundability score
+        setTimeout(() => {
+            const initialFundability = Math.round((34 + 41 + 28 + 52) / 4);
+            updateFundabilityScore([initialFundability]);
+        }, 1000);
+        
+        // Add pulse effect for threshold achievement
+        function addThresholdPulse() {
+            const container = document.getElementById('fundability-container');
+            if (container && container.classList.contains('threshold-met')) {
+                container.style.animation = 'none';
+                setTimeout(() => {
+                    container.style.animation = 'thresholdPulse 2s ease-in-out';
+                }, 10);
+            }
+        }
+        
+        // CSS animation for threshold pulse
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes thresholdPulse {
+                0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                50% { transform: translate(-50%, -50%) scale(1.02); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Trigger pulse occasionally when threshold is met
+        setInterval(() => {
+            const fundabilityValue = parseInt(document.getElementById('fundability-value').textContent);
+            if (fundabilityValue >= 75) {
+                addThresholdPulse();
+            }
+        }, 10000); // Every 10 seconds
+        
+        // Dynamic feed content updates
+        const feedStories = [
+            [
+                'Discovery: Reverse Marketplace model matching Airbnb 2008 trajectory (92% confidence)',
+                'CloudSync pivoted to vertical AI, achieved 300% growth in 8 weeks',
+                'DataForge hits $1M ARR using Slack\'s 2014 expansion strategy',
+                'Alert: Vanity metrics misleading 3 EdTech startups this week',
+                'NeuralAPI\'s API-first approach secured $12M Series A in 6 months',
+                'PayFlow executing Stripe\'s developer playbook (week 14 of 52)',
+                'Efficiency breakthrough: 8 companies cut burn by 40% using FLASH framework',
+                'FleetOS acquisition by Google validated our 87% accuracy prediction',
+                'Market insight: PLG with enterprise features accelerates funding by 2.3x'
+            ],
+            [
+                'Trend: Bottom-Up SaaS strategy adopted by 12 new startups this month',
+                'QuickBase burned $30k for 18 months, then hit $5M ARR (mirrors Basecamp 2004)',
+                'Forecast: 3 marketplace startups pivoting to SaaS within 60 days (78% confidence)',
+                'Market dynamics: Product-Led Growth succeeding in 73% of dev tool startups',
+                'TeamSync replicating Notion\'s 2018 growth trajectory, funded in 4 months',
+                'Mobile-First B2B gaining traction: 5x higher engagement than web-first',
+                'DesignHub implementing Figma\'s collaboration strategy (month 8 of 36)',
+                'Infrastructure opportunity: 15 startups building AI tooling layers',
+                'Success story: CodeFlow\'s open source strategy secured $8M seed funding'
+            ],
+            [
+                'Risk alert: Premature scaling identified in 4 Series A companies',
+                'StreamCore matching Twitch 2011 metrics, attracting 3 acquisition offers',
+                'Deep tech momentum: 8 biotech startups accelerating commercialization',
+                'Turnaround: ByteStack achieved 60% burn reduction using survival framework',
+                'Creator economy infrastructure achieving 85% funding success rate',
+                'Validation technique: 6 companies using fake door tests confirmed features in days',
+                'GameAPI implementing Unity\'s B2D2C strategy (quarter 3 of 12)',
+                'Consolidation trend: 4 companies acquiring competitors before Series B',
+                'Evolution: AI wrappers transforming into platforms, following Jasper\'s path'
+            ]
+        ];
+        
+        let currentFeedSet = 0;
+        
+        function updateFeed() {
+            const feedContent = document.getElementById('feedContent');
+            currentFeedSet = (currentFeedSet + 1) % feedStories.length;
+            const newContent = feedStories[currentFeedSet].map((story, index) => {
+                const isWarning = story.toLowerCase().includes('warning') || story.toLowerCase().includes('alert');
+                const className = isWarning ? 'feed-item warning' : 'feed-item';
+                return `<span class="${className}">${story}</span>`;
+            }).join('<span class="feed-separator"> — </span>');
+            
+            // Smooth transition
+            feedContent.style.opacity = '0.3';
+            setTimeout(() => {
+                feedContent.innerHTML = newContent;
+                feedContent.style.opacity = '1';
+            }, 500);
+        }
+        
+        // Update feed every 3 minutes
+        setInterval(updateFeed, 180000);
+
+        // Portal interaction
+        const portals = document.querySelectorAll('.portal');
+        
+        portals.forEach(portal => {
+            portal.addEventListener('mouseenter', () => {
+                // Accelerate frame rotation on hover
+                const frames = portal.querySelectorAll('.frame');
+                frames.forEach(frame => {
+                    frame.style.animationPlayState = 'running';
+                });
+            });
+
+            portal.addEventListener('mouseleave', () => {
+                const frames = portal.querySelectorAll('.frame');
+                frames.forEach(frame => {
+                    frame.style.animationPlayState = 'running';
+                });
+            });
+        });
+
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;
+            const y = (e.clientY / window.innerHeight - 0.5) * 10;
+            
+            const monolith = document.querySelector('.monolith');
+            if (monolith) {
+                monolith.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            }
+        });
+
+        // Add subtle pulse to center points
+        setInterval(() => {
+            const points = document.querySelectorAll('.center-point');
+            points.forEach((point, index) => {
+                setTimeout(() => {
+                    point.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    setTimeout(() => {
+                        point.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 300);
+                }, index * 500);
+            });
+        }, 3000);
+        
+        // Mobile updates - sync with desktop
+        function updateMobileMetrics() {
+            if (window.innerWidth <= 900) {
+                // Update mobile values to match desktop
+                const capitalScore = document.getElementById('capital-score');
+                const advantageScore = document.getElementById('advantage-score');
+                const marketScore = document.getElementById('market-score');
+                const peopleScore = document.getElementById('people-score');
+                const fundabilityValue = document.getElementById('fundability-value');
+                
+                if (capitalScore) {
+                    const capital = capitalScore.textContent;
+                    const advantage = advantageScore.textContent;
+                    const market = marketScore.textContent;
+                    const people = peopleScore.textContent;
+                    const fundability = fundabilityValue.textContent;
+                    
+                    // Update mobile displays
+                    document.getElementById('mobile-capital').textContent = capital;
+                    document.getElementById('mobile-advantage').textContent = advantage;
+                    document.getElementById('mobile-market').textContent = market;
+                    document.getElementById('mobile-people').textContent = people;
+                    document.getElementById('mobile-fundability-value').textContent = fundability;
+                    
+                    // Update mobile bars
+                    document.getElementById('mobile-c-fill').style.width = capital + '%';
+                    document.getElementById('mobile-a-fill').style.width = advantage + '%';
+                    document.getElementById('mobile-m-fill').style.width = market + '%';
+                    document.getElementById('mobile-p-fill').style.width = people + '%';
+                }
+            }
+        }
+        
+        // Call mobile updates when desktop updates
+        setInterval(updateMobileMetrics, 1000);
     </script>
-    <script src="config.js"></script>
-    <script src="advisor.js"></script>
-    <script src="jarvis-personality.js"></script>
-    <script src="context-engine.js"></script>
-    <script src="jarvis-contextual.js"></script>
-    <script src="voice-system.js"></script>
-    <script type="module" src="app.js"></script>
+    </div><!-- End Desktop-Only Content -->
 </body>
-</html>
+</html><!-- Force rebuild Mon Aug 18 09:10:18 JST 2025 -->
+ 
