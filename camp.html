@@ -821,6 +821,7 @@
             scoreValue.textContent = score;
             scoreNarrative.textContent = narrative;
             document.getElementById('stage-label').textContent = label;
+            document.getElementById('stage-score-label').textContent = `Target Score • ${score}`;
 
             const progress = Math.min(Math.max(score, 0), 100) / 100;
             const offset = circumference - circumference * progress;
