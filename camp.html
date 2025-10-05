@@ -133,43 +133,44 @@
 
         .orb {
             position: relative;
-            width: min(420px, 70vw);
+            width: min(360px, 60vw);
             aspect-ratio: 1;
             margin: 0 auto;
         }
 
-        .halo {
+        .halo,
+        .pulse-ring,
+        .core {
             position: absolute;
-            inset: 0;
             border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.35) 45%, transparent 78%);
+        }
+
+        .halo {
+            inset: 2.5%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.35) 42%, transparent 82%);
         }
 
         .pulse-ring {
-            position: absolute;
-            inset: 10%;
-            border-radius: 50%;
+            inset: 12%;
             border: 1px solid rgba(5,6,7,0.08);
             animation: rotate 24s linear infinite;
         }
 
         .pulse-ring:nth-child(3) {
-            inset: 22%;
+            inset: 24%;
             animation-direction: reverse;
             animation-duration: 36s;
         }
 
         .core {
-            position: absolute;
-            inset: 30%;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(10px);
+            inset: 34%;
+            background: rgba(255,255,255,0.94);
+            backdrop-filter: blur(12px);
             display: grid;
             place-items: center;
             text-align: center;
-            gap: 10px;
-            box-shadow: 0 28px 42px rgba(5,6,7,0.08);
+            gap: 8px;
+            box-shadow: 0 24px 38px rgba(5,6,7,0.08);
         }
 
         .core span {
@@ -414,7 +415,7 @@
 
         .gauge {
             position: relative;
-            width: min(320px, 70vw);
+            width: min(280px, 58vw);
             aspect-ratio: 1;
             margin: 0 auto;
         }
