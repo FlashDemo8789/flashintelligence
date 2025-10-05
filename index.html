@@ -332,27 +332,27 @@
         /* CAMP Overlay */
         .camp-tab {
             position: fixed;
-            right: -72px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: center;
+            bottom: 40px;
+            right: 40px;
             background: rgba(255, 255, 255, 0.92);
             border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 999px 999px 0 0;
-            padding: 12px 32px;
+            border-radius: 999px;
+            padding: 12px 28px;
             letter-spacing: 0.35em;
             text-transform: uppercase;
             font-size: 11px;
             font-weight: 500;
-            color: rgba(0, 0, 0, 0.6);
+            color: rgba(0, 0, 0, 0.65);
             cursor: pointer;
             z-index: 450;
-            transition: background 0.3s ease, color 0.3s ease, right 0.4s ease;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
+            transition: background 0.3s ease, color 0.3s ease, right 0.4s ease, box-shadow 0.3s ease;
         }
 
         .camp-tab:hover {
-            background: rgba(0, 0, 0, 0.08);
-            color: #000;
+            background: #000;
+            color: #fff;
+            box-shadow: 0 24px 36px rgba(0, 0, 0, 0.18);
         }
 
         .camp-tab:focus-visible {
@@ -361,8 +361,9 @@
         }
 
         .camp-tab.active {
-            right: 440px;
-            color: #000;
+            right: 480px;
+            background: #000;
+            color: #fff;
         }
 
         .camp-overlay {
@@ -524,10 +525,7 @@
             .camp-tab {
                 right: 24px;
                 bottom: 24px;
-                top: auto;
-                transform: none;
-                border-radius: 999px;
-                padding: 12px 20px;
+                padding: 12px 22px;
             }
 
             .camp-tab.active {
