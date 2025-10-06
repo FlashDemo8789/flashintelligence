@@ -785,9 +785,9 @@
             transition: width 1s ease;
         }
     </style>
-<script>(function(){try{if("serviceWorker" in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister()})});}if(window.caches</head></head>caches.keys){caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}}catch(e){}})();</script>
 </head>
 <body>
+<script>(function(){try{if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister()})});}if(window.caches&&caches.keys){caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}}catch(e){}})();</script>
     <!-- Mobile-Only Layout -->
     <div class="mobile-only mobile-layout">
         <div class="mobile-header">
