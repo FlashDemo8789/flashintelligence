@@ -16,21 +16,94 @@
       --line: rgba(4,5,6,0.08);
       --panel: rgba(255,255,255,0.92);
       --accent: #0d0d0d;
+      --pointer-x: 52%;
+      --pointer-y: 28%;
     }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--ink);
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
     .surface {
+      position: relative;
+      z-index: 1;
       width: min(1200px, 94vw);
       margin: 0 auto;
       padding: 72px 0 120px;
       display: grid;
       gap: 80px;
+    }
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ambient::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255,255,255,0.58), rgba(184,210,255,0.12) 52%, transparent 70%);
+      filter: blur(90px);
+      opacity: 0.85;
+      animation: ambientPulse 18s ease-in-out infinite;
+    }
+    .ambient::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: radial-gradient(circle at 60% 42%, rgba(132,160,255,0.18), transparent 72%);
+      filter: blur(120px);
+      opacity: 0.6;
+    }
+    .ambient .grid {
+      position: absolute;
+      inset: -12%;
+      background-image: linear-gradient(rgba(4,5,6,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(4,5,6,0.08) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.28;
+      transform: translate3d(0,0,0);
+      animation: gridDrift 32s linear infinite;
+    }
+    .ambient .halo {
+      position: absolute;
+      width: clamp(320px, 42vw, 540px);
+      height: clamp(320px, 42vw, 540px);
+      border-radius: 50%;
+      border: 1px solid rgba(4,5,6,0.08);
+      background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 68%);
+      mix-blend-mode: screen;
+      animation: haloSpin 26s linear infinite;
+    }
+    .ambient .halo-one {
+      top: 18%;
+      right: 18%;
+    }
+    .ambient .halo-two {
+      bottom: 12%;
+      left: 14%;
+      width: clamp(240px, 32vw, 420px);
+      height: clamp(240px, 32vw, 420px);
+      animation-duration: 34s;
+      animation-direction: reverse;
+    }
+    @keyframes ambientPulse {
+      0%, 100% { opacity: 0.6; }
+      45% { opacity: 0.95; }
+    }
+    @keyframes gridDrift {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-120px, -160px, 0); }
+    }
+    @keyframes haloSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     header {
       display: flex;
@@ -95,6 +168,12 @@
       padding: 36px;
       display: grid;
       gap: 18px;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 50px rgba(4,5,6,0.12);
     }
     .panel h2 {
       font-size: 16px;
@@ -149,6 +228,15 @@
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.7) 45%, rgba(4,5,6,0.05) 78%);
       box-shadow: inset 0 -20px 32px rgba(4,5,6,0.06);
+    }
+    .gauge::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.55), transparent 70%);
+      opacity: 0.65;
+      pointer-events: none;
     }
     .gauge-value {
       position: absolute;
@@ -286,11 +374,14 @@
       display: grid;
       gap: 8px;
       cursor: pointer;
-      transition: transform 0.3s ease, border 0.3s ease;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.35s ease, border 0.3s ease, box-shadow 0.35s ease;
+      animation: floatCard 22s ease-in-out infinite;
     }
     .sample-card:hover, .sample-card.active {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       border-color: rgba(4,5,6,0.25);
+      box-shadow: 0 18px 40px rgba(4,5,6,0.12);
     }
     .sample-meta {
       font-size: 12px;
@@ -302,26 +393,68 @@
       font-size: 18px;
       font-weight: 400;
     }
+    .samples .sample-card:nth-child(3n+1) { animation-duration: 24s; animation-delay: -4s; }
+    .samples .sample-card:nth-child(3n+2) { animation-duration: 26s; animation-delay: -8s; }
+    .samples .sample-card:nth-child(3n) { animation-duration: 28s; animation-delay: -12s; }
+    @keyframes floatCard {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -8px, 0); }
+    }
     .timeline {
+      position: relative;
       display: grid;
-      gap: 18px;
+      gap: 20px;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(4,5,6,0.2), rgba(4,5,6,0));
     }
     .timeline-step {
-      border-left: 2px solid rgba(4,5,6,0.15);
-      padding-left: 16px;
+      position: relative;
+      padding-left: 22px;
       display: grid;
       gap: 6px;
+      opacity: 0.68;
+      transition: opacity 0.35s ease, transform 0.4s ease;
+    }
+    .timeline-step::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(4,5,6,0.18);
+      box-shadow: 0 0 0 0 rgba(4,5,6,0.08);
+      transition: box-shadow 0.4s ease, background 0.4s ease, transform 0.4s ease;
     }
     .timeline-step strong {
       font-size: 12px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(4,5,6,0.55);
+      color: rgba(4,5,6,0.58);
     }
     .timeline-step p {
       font-size: 14px;
       color: rgba(4,5,6,0.62);
       line-height: 1.6;
+      max-width: 520px;
+    }
+    .timeline-step.active {
+      opacity: 1;
+      transform: translateX(6px);
+    }
+    .timeline-step.active::before {
+      background: var(--accent);
+      box-shadow: 0 0 0 8px rgba(4,5,6,0.08);
+      transform: scale(1.08);
     }
     .cta {
       border-radius: 30px;
@@ -371,10 +504,29 @@
       .weight-row { grid-template-columns: 1fr; gap: 10px; }
       .weight-value { justify-self: start; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .ambient::before,
+      .ambient::after,
+      .ambient .grid,
+      .ambient .halo,
+      .sample-card,
+      .samples .sample-card:nth-child(3n+1),
+      .samples .sample-card:nth-child(3n+2),
+      .samples .sample-card:nth-child(3n),
+      .panel {
+        animation: none !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
   </style>
 </head>
 <body>
 <script>(function(){try{if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister()})});}if(window.caches&&caches.keys){caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});}}catch(e){}})();</script>
+  <div class="ambient">
+    <div class="grid"></div>
+    <div class="halo halo-one"></div>
+    <div class="halo halo-two"></div>
+  </div>
   <div class="surface">
     <header>
       <div class="brand">
@@ -402,10 +554,10 @@
       </div>
 
       <div class="panel gauge-panel">
-        <div class="gauge" id="gauge" style="--angle: 244deg;"></div>
+        <div class="gauge" id="gauge" style="--angle: 0deg;"></div>
         <div class="gauge-value">
           <span>Fundability</span>
-          <strong id="scoreValue">68</strong>
+          <strong id="scoreValue">0</strong>
         </div>
         <div class="instrument-copy" id="scoreSummary">Your first proof points are about speed and resilience. Show weekly product motion, early retention sparks, and a path to efficient growth.</div>
       </div>
@@ -498,6 +650,32 @@
   </div>
 
   <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+
+    if (!prefersReducedMotion) {
+      const pointerDefaults = () => {
+        root.style.setProperty('--pointer-x', '52%');
+        root.style.setProperty('--pointer-y', '28%');
+      };
+      pointerDefaults();
+      let pointerFrame;
+      const updatePointer = (event) => {
+        if (pointerFrame) {
+          cancelAnimationFrame(pointerFrame);
+        }
+        pointerFrame = requestAnimationFrame(() => {
+          const width = window.innerWidth || 1;
+          const height = window.innerHeight || 1;
+          const x = ((event.clientX ?? width / 2) / width) * 100;
+          const y = ((event.clientY ?? height / 2) / height) * 100;
+          root.style.setProperty('--pointer-x', `${x.toFixed(2)}%`);
+          root.style.setProperty('--pointer-y', `${(y * 0.85).toFixed(2)}%`);
+        });
+      };
+      window.addEventListener('pointermove', updatePointer, { passive: true });
+    }
+
     const pillarData = {
       capital: {
         title: 'Capital — financial discipline',
@@ -566,6 +744,64 @@
     });
     setPillar('capital');
 
+    const timelineSteps = [
+      {
+        title: 'Weeks 1-2',
+        copy: 'Baseline CAMP, align the founding team, and reframe the deck around what investors will actually weigh.'
+      },
+      {
+        title: 'Weeks 3-4',
+        copy: 'Execute the top two fixes from the action plan. Re-run the analysis to prove motion and tighten the story.'
+      },
+      {
+        title: 'Weeks 5-6',
+        copy: 'Layer in efficiency metrics, sharpen retention, and tee up conversations with investors who match your profile.'
+      },
+      {
+        title: 'Weeks 7+',
+        copy: 'Score crosses 75. Unlock FLASH Fund access, partner interviews, and a roadmap for your next raise.'
+      }
+    ];
+
+    const timeline = document.getElementById('timeline');
+    let timelineItems = [];
+    let timelineIndex = 0;
+    let timelineTimer;
+
+    function activateTimeline(index, options = {}) {
+      const { fromAuto = false } = options;
+      if (!timelineItems.length) return;
+      timelineItems.forEach((node, idx) => {
+        node.classList.toggle('active', idx === index);
+      });
+      timelineIndex = index;
+      if (!fromAuto) {
+        scheduleTimelineCycle();
+      }
+    }
+
+    function scheduleTimelineCycle() {
+      clearInterval(timelineTimer);
+      if (prefersReducedMotion || timelineItems.length <= 1) {
+        return;
+      }
+      timelineTimer = setInterval(() => {
+        const next = (timelineIndex + 1) % timelineItems.length;
+        activateTimeline(next, { fromAuto: true });
+      }, 9000);
+    }
+
+    if (timeline) {
+      timeline.innerHTML = timelineSteps
+        .map((step) => `<div class="timeline-step"><strong>${step.title}</strong><p>${step.copy}</p></div>`)
+        .join('');
+      timelineItems = Array.from(timeline.querySelectorAll('.timeline-step'));
+      if (timelineItems.length) {
+        activateTimeline(0, { fromAuto: true });
+        scheduleTimelineCycle();
+      }
+    }
+
     const stages = [
       {
         label: 'Pre-Seed Focus',
@@ -608,16 +844,62 @@
     const scoreSummary = document.getElementById('scoreSummary');
     const gauge = document.getElementById('gauge');
 
-    function updateGauge(score) {
-      const angle = Math.round((score / 100) * 360);
+    let stageCurrentIndex = 0;
+    let stageTimer;
+    let gaugeCurrentValue = 0;
+    let gaugeAnimationFrame;
+
+    function updateGauge(value) {
+      const bounded = Math.max(0, Math.min(100, value));
+      const angle = Math.round((bounded / 100) * 360);
+      scoreValue.textContent = Math.round(bounded).toString();
       gauge.style.setProperty('--angle', `${angle}deg`);
     }
 
-    function setStage(index) {
+    function animateGauge(target) {
+      if (prefersReducedMotion) {
+        gaugeCurrentValue = target;
+        updateGauge(target);
+        return;
+      }
+      cancelAnimationFrame(gaugeAnimationFrame);
+      const startValue = gaugeCurrentValue;
+      const delta = target - startValue;
+      const duration = 900;
+      const startTime = performance.now();
+
+      const step = (currentTime) => {
+        const progress = Math.min(1, (currentTime - startTime) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = startValue + delta * eased;
+        updateGauge(value);
+        if (progress < 1) {
+          gaugeAnimationFrame = requestAnimationFrame(step);
+        } else {
+          gaugeCurrentValue = target;
+        }
+      };
+
+      gaugeAnimationFrame = requestAnimationFrame(step);
+    }
+
+    function scheduleStageCycle() {
+      clearInterval(stageTimer);
+      if (prefersReducedMotion || stages.length <= 1) {
+        return;
+      }
+      stageTimer = setInterval(() => {
+        const next = (stageCurrentIndex + 1) % stages.length;
+        setStage(next, { fromAuto: true });
+      }, 8000);
+    }
+
+    function setStage(index, options = {}) {
+      const { fromAuto = false } = options;
       const stage = stages[index] || stages[0];
+      stageCurrentIndex = index;
       stageLabel.textContent = stage.label;
       stageScore.textContent = `Target Score • ${stage.score}`;
-      scoreValue.textContent = stage.score;
       scoreSummary.textContent = stage.narrative;
       fillCapital.style.width = `${stage.weights.capital}%`;
       fillAdvantage.style.width = `${stage.weights.advantage}%`;
@@ -632,7 +914,10 @@
         btn.classList.toggle('active', active);
         btn.setAttribute('aria-selected', active ? 'true' : 'false');
       });
-      updateGauge(stage.score);
+      animateGauge(stage.score);
+      if (!fromAuto) {
+        scheduleStageCycle();
+      }
     }
 
     stageButtons.forEach((btn) => {
@@ -645,7 +930,10 @@
         }
       });
     });
-    setStage(0);
+
+    updateGauge(0);
+    setStage(0, { fromAuto: true });
+    scheduleStageCycle();
 
     const sampleGrid = document.getElementById('sampleGrid');
     const samplePanel = document.getElementById('samplePanel');
@@ -659,31 +947,54 @@
       series_c: 3
     };
 
+    const sampleContext = { samples: [], cards: [] };
+    let sampleIndex = 0;
+    let sampleTimer;
+
     const pct = (value) => `${(value * 100).toFixed(1)}%`;
 
-    function activateCard(card) {
-      document.querySelectorAll('.sample-card').forEach((entry) => entry.classList.remove('active'));
-      if (card) {
-        card.classList.add('active');
+    function scheduleSampleCycle() {
+      clearInterval(sampleTimer);
+      if (prefersReducedMotion || sampleContext.samples.length <= 1) {
+        return;
       }
+      sampleTimer = setInterval(() => {
+        if (!sampleContext.samples.length) return;
+        const next = (sampleIndex + 1) % sampleContext.samples.length;
+        activateSample(next, { fromAuto: true });
+      }, 9000);
     }
 
-    function applySample(sample, card) {
-      const index = stageIndexMap[sample.stage] ?? 0;
-      setStage(index);
+    function activateSample(index, options = {}) {
+      const { fromAuto = false } = options;
+      const samples = sampleContext.samples;
+      const cards = sampleContext.cards;
+      if (!samples.length) return;
+      const sample = samples[index];
+      if (!sample) return;
+      const targetStage = stageIndexMap[sample.stage] ?? 0;
+      setStage(targetStage, { fromAuto });
       samplePanel.hidden = false;
       sampleName.textContent = `${sample.name} • ${sample.stage.toUpperCase()} • ${sample.sector.toUpperCase()}`;
       sampleVerdict.textContent = `${pct(sample.success_probability)} success • ${sample.verdict}`;
-      activateCard(card);
+      cards.forEach((card, idx) => {
+        card.classList.toggle('active', idx === index);
+      });
+      sampleIndex = index;
+      if (!fromAuto) {
+        scheduleSampleCycle();
+      }
     }
 
     fetch('assets/camp-sample-predictions.json')
       .then((response) => response.json())
       .then((samples) => {
         if (!Array.isArray(samples) || !samples.length) {
+          sampleGrid.innerHTML = '<div class="instrument-copy">Sample predictions offline.</div>';
           return;
         }
 
+        sampleContext.samples = samples;
         sampleGrid.innerHTML = samples.map((sample) => `
           <div class="sample-card" tabindex="0">
             <div class="sample-meta">${sample.stage.toUpperCase()} • ${sample.sector.toUpperCase()}</div>
@@ -694,24 +1005,39 @@
         `).join('');
 
         const cards = Array.from(document.querySelectorAll('.sample-card'));
+        sampleContext.cards = cards;
         cards.forEach((card, idx) => {
-          const sample = samples[idx];
-          const activate = () => applySample(sample, card);
-          card.addEventListener('click', activate);
+          const trigger = () => activateSample(idx);
+          card.addEventListener('click', trigger);
+          card.addEventListener('mouseenter', trigger);
+          card.addEventListener('focus', trigger);
           card.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
-              activate();
+              activateSample(idx);
             }
           });
-          card.addEventListener('focus', activate);
         });
 
-        applySample(samples[0], cards[0]);
+        activateSample(0, { fromAuto: true });
+        scheduleSampleCycle();
       })
       .catch((error) => {
         console.error('Unable to load CAMP samples', error);
+        sampleGrid.innerHTML = '<div class="instrument-copy">Live samples temporarily unavailable.</div>';
       });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        clearInterval(stageTimer);
+        clearInterval(sampleTimer);
+        clearInterval(timelineTimer);
+      } else {
+        scheduleStageCycle();
+        scheduleSampleCycle();
+        scheduleTimelineCycle();
+      }
+    });
   </script>
 
 </body>
