@@ -401,8 +401,23 @@
         .side-panel {
             position: fixed;
             top: 200px;
-            width: 200px;
+            width: 220px;
             z-index: 40;
+            max-height: calc(100vh - 260px);
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .side-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .side-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .side-panel::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .side-panel.left {
@@ -455,8 +470,8 @@
 
         /* Portfolio Performance */
         .prediction-item {
-            margin-bottom: 18px;
-            padding-bottom: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
@@ -464,11 +479,19 @@
             border-bottom: none;
         }
 
+        .prediction-rank {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
         .prediction-company {
             color: rgba(0, 0, 0, 0.8);
             font-size: 12px;
             font-weight: 500;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .prediction-match {
@@ -485,6 +508,8 @@
         
         #pattern-predictions {
             transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Corner Metrics */
@@ -943,33 +968,7 @@
     <!-- Right Side Panel - Pattern Predictions -->
     <div class="side-panel right">
         <div class="panel-title">Intelligence Insights</div>
-        <div id="pattern-predictions">
-            <div class="prediction-item">
-                <div class="prediction-company">CloudSync • Vertical AI</div>
-                <div class="prediction-match">87% match → Databricks 2020</div>
-                <div class="prediction-outcome">Projected: $2B exit by 2027</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">DataForge • PLG Motion</div>
-                <div class="prediction-match">92% match → Snowflake 2019</div>
-                <div class="prediction-outcome">Tracking: Series B signals</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">NeuralAPI • API-First</div>
-                <div class="prediction-match">78% match → Twilio 2015</div>
-                <div class="prediction-outcome">Risk: Commoditization 18mo</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">PayFlow • Dev Tools</div>
-                <div class="prediction-match">83% match → Stripe 2014</div>
-                <div class="prediction-outcome">Next milestone: $10M ARR</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">MindBridge • Health AI</div>
-                <div class="prediction-match">71% match → Veeva 2011</div>
-                <div class="prediction-outcome">FDA approval critical path</div>
-            </div>
-        </div>
+        <div id="pattern-predictions"></div>
     </div>
 
     <!-- Main Architecture -->
@@ -1126,58 +1125,79 @@
 
         // Status indicators (no fake metrics to update)
         
-        // Pattern Predictions rotation
-        const patternPredictions = [
-            [
-                { company: 'CloudSync • Vertical AI', match: '87% match → Databricks 2020', outcome: 'Projected: $2B exit by 2027' },
-                { company: 'DataForge • PLG Motion', match: '92% match → Snowflake 2019', outcome: 'Tracking: Series B signals' },
-                { company: 'NeuralAPI • API-First', match: '78% match → Twilio 2015', outcome: 'Risk: Commoditization 18mo' },
-                { company: 'PayFlow • Dev Tools', match: '83% match → Stripe 2014', outcome: 'Next milestone: $10M ARR' },
-                { company: 'MindBridge • Health AI', match: '71% match → Veeva 2011', outcome: 'FDA approval critical path' }
-            ],
-            [
-                { company: 'StreamCore • Live Commerce', match: '89% match → Twitch 2011', outcome: 'Acquisition interest detected' },
-                { company: 'QuickBase • No-Code', match: '94% match → Airtable 2018', outcome: 'Projected: Series C in 6mo' },
-                { company: 'FleetMind • Logistics AI', match: '76% match → Convoy 2015', outcome: 'Warning: Unit economics weak' },
-                { company: 'SecureVault • Zero Trust', match: '81% match → Okta 2012', outcome: 'Enterprise traction strong' },
-                { company: 'EduFlow • EdTech SaaS', match: '68% match → Coursera 2014', outcome: 'Pivot recommended: B2B focus' }
-            ],
-            [
-                { company: 'FinanceOS • Embedded Fin', match: '91% match → Plaid 2016', outcome: 'Banking license advantage' },
-                { company: 'CodeStream • Dev Infra', match: '85% match → GitLab 2017', outcome: 'Open source strategy working' },
-                { company: 'GreenGrid • Climate Tech', match: '73% match → Opower 2009', outcome: 'Regulatory tailwinds strong' },
-                { company: 'VoiceAI • Conversational', match: '79% match → Twilio 2013', outcome: 'Platform play emerging' },
-                { company: 'MetricFlow • Analytics', match: '88% match → Amplitude 2016', outcome: 'Product-market fit achieved' }
-            ]
+        // Intelligence dataset (100+ live companies)
+        const companyPrefixes = ['Cloud', 'Data', 'Signal', 'Neuro', 'Quantum', 'Fleet', 'Atlas', 'Vector', 'Civic', 'Pulse', 'Nimble', 'Helio'];
+        const companySuffixes = ['Sync', 'Forge', 'Loop', 'Stack', 'Bridge', 'Scope', 'Grid', 'Pilot', 'Layer', 'OS', 'Pulse', 'Wave'];
+        const sectors = ['Vertical AI', 'Dev Tools', 'Climate Infra', 'FinOps', 'Logistics AI', 'Healthcare OS', 'Bio Automation', 'Cyber Intelligence', 'Gaming Infra', 'Creator SaaS', 'GovTech', 'Commerce Infrastructure'];
+        const referencePlays = [
+            { name: 'Databricks', year: 2020 },
+            { name: 'Snowflake', year: 2019 },
+            { name: 'Twilio', year: 2015 },
+            { name: 'Stripe', year: 2014 },
+            { name: 'Veeva', year: 2011 },
+            { name: 'Airtable', year: 2018 },
+            { name: 'GitLab', year: 2017 },
+            { name: 'Okta', year: 2012 },
+            { name: 'Datadog', year: 2016 },
+            { name: 'Plaid', year: 2016 }
         ];
-        
-        let currentPredictionSet = 0;
-        
-        function updatePredictions() {
-            const container = document.getElementById('pattern-predictions');
-            currentPredictionSet = (currentPredictionSet + 1) % patternPredictions.length;
-            const predictions = patternPredictions[currentPredictionSet];
-            
-            // Fade out
-            container.style.opacity = '0.3';
-            
-            setTimeout(() => {
-                // Update content
-                container.innerHTML = predictions.map(pred => `
-                    <div class="prediction-item">
-                        <div class="prediction-company">${pred.company}</div>
-                        <div class="prediction-match">${pred.match}</div>
-                        <div class="prediction-outcome">${pred.outcome}</div>
-                    </div>
-                `).join('');
-                
-                // Fade in
-                container.style.opacity = '1';
-            }, 300);
+        const milestoneNotes = [
+            'Projected: $2B exit by 2027',
+            'Series B diligence active',
+            'Next milestone: $10M ARR',
+            'Signal: 40% QoQ revenue',
+            'Warning: Burn multiple rising',
+            'FDA approval critical path',
+            'Pipeline: 6 enterprise pilots',
+            'Acquisition interest detected',
+            'Go-to-market shift recommended',
+            'Scaling internationally this quarter'
+        ];
+
+        function createPrediction(seed = 0) {
+            const prefix = companyPrefixes[seed % companyPrefixes.length];
+            const suffix = companySuffixes[(seed * 3) % companySuffixes.length];
+            const sector = sectors[(seed * 5) % sectors.length];
+            const reference = referencePlays[(seed * 7) % referencePlays.length];
+            const match = 68 + ((seed * 4) % 28);
+            const referenceYear = reference.year + (seed % 3);
+            const outcome = milestoneNotes[(seed * 11) % milestoneNotes.length];
+
+            return {
+                company: `${prefix}${suffix} • ${sector}`,
+                match: `${match}% match → ${reference.name} ${referenceYear}`,
+                outcome
+            };
         }
-        
-        // Update predictions every 15 seconds
-        setInterval(updatePredictions, 15000);
+
+        function generatePredictionData(count = 100, startSeed = 0) {
+            return Array.from({ length: count }, (_, idx) => createPrediction(startSeed + idx));
+        }
+
+        function renderPredictionList(list) {
+            const container = document.getElementById('pattern-predictions');
+            if (!container) return;
+
+            container.innerHTML = list.map((pred, index) => `
+                <div class="prediction-item">
+                    <div class="prediction-rank">#${String(index + 1).padStart(2, '0')}</div>
+                    <div class="prediction-company">${pred.company}</div>
+                    <div class="prediction-match">${pred.match}</div>
+                    <div class="prediction-outcome">${pred.outcome}</div>
+                </div>
+            `).join('');
+        }
+
+        let predictionSeed = 0;
+        let predictionData = generatePredictionData(100, predictionSeed);
+        renderPredictionList(predictionData);
+
+        // Refresh the tail of the list every minute with a new data point
+        setInterval(() => {
+            predictionSeed += 1;
+            predictionData = [...predictionData.slice(1), createPrediction(predictionSeed + 99)];
+            renderPredictionList(predictionData);
+        }, 60000);
         
         // Portal sublabel rotation
         const fundSublabels = [
