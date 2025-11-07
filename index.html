@@ -1333,64 +1333,85 @@
             }
         }, 10000); // Every 10 seconds
         
-        // Dynamic feed content updates
-        const feedStories = [
-            [
-                'Discovery: Reverse Marketplace model matching Airbnb 2008 trajectory (92% confidence)',
-                'CloudSync pivoted to vertical AI, achieved 300% growth in 8 weeks',
-                'DataForge hits $1M ARR using Slack\'s 2014 expansion strategy',
-                'Alert: Vanity metrics misleading 3 EdTech startups this week',
-                'NeuralAPI\'s API-first approach secured $12M Series A in 6 months',
-                'PayFlow executing Stripe\'s developer playbook (week 14 of 52)',
-                'Efficiency breakthrough: 8 companies cut burn by 40% using FLASH framework',
-                'FleetOS acquisition by Google validated our 87% accuracy prediction',
-                'Market insight: PLG with enterprise features accelerates funding by 2.3x'
-            ],
-            [
-                'Trend: Bottom-Up SaaS strategy adopted by 12 new startups this month',
-                'QuickBase burned $30k for 18 months, then hit $5M ARR (mirrors Basecamp 2004)',
-                'Forecast: 3 marketplace startups pivoting to SaaS within 60 days (78% confidence)',
-                'Market dynamics: Product-Led Growth succeeding in 73% of dev tool startups',
-                'TeamSync replicating Notion\'s 2018 growth trajectory, funded in 4 months',
-                'Mobile-First B2B gaining traction: 5x higher engagement than web-first',
-                'DesignHub implementing Figma\'s collaboration strategy (month 8 of 36)',
-                'Infrastructure opportunity: 15 startups building AI tooling layers',
-                'Success story: CodeFlow\'s open source strategy secured $8M seed funding'
-            ],
-            [
-                'Risk alert: Premature scaling identified in 4 Series A companies',
-                'StreamCore matching Twitch 2011 metrics, attracting 3 acquisition offers',
-                'Deep tech momentum: 8 biotech startups accelerating commercialization',
-                'Turnaround: ByteStack achieved 60% burn reduction using survival framework',
-                'Creator economy infrastructure achieving 85% funding success rate',
-                'Validation technique: 6 companies using fake door tests confirmed features in days',
-                'GameAPI implementing Unity\'s B2D2C strategy (quarter 3 of 12)',
-                'Consolidation trend: 4 companies acquiring competitors before Series B',
-                'Evolution: AI wrappers transforming into platforms, following Jasper\'s path'
-            ]
+        // Dynamic feed content updates (12-item rotating ticker)
+        const feedRoots = ['Cloud', 'Data', 'Signal', 'Neuro', 'Quantum', 'Fleet', 'Atlas', 'Vector', 'Pulse', 'Helio', 'Civic', 'Lattice'];
+        const feedSuffixes = ['Sync', 'Forge', 'Loop', 'Flow', 'Grid', 'Pulse', 'Pilot', 'Layer', 'OS', 'Dynamics'];
+        const feedThemes = ['Vertical AI', 'FinOps', 'Logistics', 'BioAutomation', 'Security', 'Climate Tech', 'Workflow', 'Dev Tools', 'Commerce Infra', 'GovTech'];
+        const feedPlaybooks = ['Airbnb 2008', 'Stripe 2014', 'Snowflake 2019', 'Databricks 2020', 'Notion 2018', 'Figma 2017', 'Twilio 2015', 'Airtable 2018'];
+        const feedSignals = [
+            '87% enterprise win rate',
+            '3.4x QoQ revenue growth',
+            'burn multiple at 1.3x',
+            'net retention 168%',
+            'ACV crossed $120k',
+            'waitlist 42k users',
+            'pipeline up 240%',
+            'expansion deals in 9 markets'
         ];
-        
-        let currentFeedSet = 0;
-        
-        function updateFeed() {
+        const feedWarnings = [
+            'burn multiple exceeded 4.1x',
+            'hiring ahead of revenue trend',
+            'unit economics still negative',
+            'CAC payback stretched to 28 months',
+            'infrastructure spend overruns',
+            'regulatory delay projected 2 quarters'
+        ];
+
+        const FEED_BATCH_SIZE = 12;
+        const FEED_TOTAL_ITEMS = 72;
+
+        function createFeedStory(seed = 0) {
+            const company = `${feedRoots[seed % feedRoots.length]}${feedSuffixes[(seed * 3) % feedSuffixes.length]}`;
+            const theme = feedThemes[(seed * 5) % feedThemes.length];
+            const playbook = feedPlaybooks[(seed * 7) % feedPlaybooks.length];
+            const signal = feedSignals[(seed * 11) % feedSignals.length];
+            if (seed % 7 === 0) {
+                const warning = feedWarnings[(seed * 13) % feedWarnings.length];
+                return `Alert: ${company} ${theme} ${warning}`;
+            }
+            return `Signal: ${company} ${theme} mirroring ${playbook} (${signal})`;
+        }
+
+        function generateFeedItems(count, startSeed = 0) {
+            return Array.from({ length: count }, (_, idx) => createFeedStory(startSeed + idx));
+        }
+
+        let feedSeedBase = 0;
+        let feedItems = generateFeedItems(FEED_TOTAL_ITEMS, feedSeedBase);
+        let feedOffset = 0;
+
+        function renderFeedWindow() {
             const feedContent = document.getElementById('feedContent');
-            currentFeedSet = (currentFeedSet + 1) % feedStories.length;
-            const newContent = feedStories[currentFeedSet].map((story, index) => {
-                const isWarning = story.toLowerCase().includes('warning') || story.toLowerCase().includes('alert');
+            if (!feedContent) return;
+            const slice = [];
+            for (let i = 0; i < FEED_BATCH_SIZE; i++) {
+                slice.push(feedItems[(feedOffset + i) % feedItems.length]);
+            }
+            const markup = slice.map(story => {
+                const isWarning = story.toLowerCase().includes('alert');
                 const className = isWarning ? 'feed-item warning' : 'feed-item';
                 return `<span class="${className}">${story}</span>`;
             }).join('<span class="feed-separator"> — </span>');
-            
-            // Smooth transition
+
             feedContent.style.opacity = '0.3';
             setTimeout(() => {
-                feedContent.innerHTML = newContent;
+                feedContent.innerHTML = markup;
                 feedContent.style.opacity = '1';
-            }, 500);
+            }, 300);
         }
-        
-        // Update feed every 3 minutes
-        setInterval(updateFeed, 180000);
+
+        function advanceFeedWindow() {
+            feedOffset += FEED_BATCH_SIZE;
+            if (feedOffset >= feedItems.length) {
+                feedSeedBase += FEED_TOTAL_ITEMS;
+                feedItems = generateFeedItems(FEED_TOTAL_ITEMS, feedSeedBase);
+                feedOffset = 0;
+            }
+            renderFeedWindow();
+        }
+
+        renderFeedWindow();
+        setInterval(advanceFeedWindow, 45000);
 
         // Portal interaction
         const portals = document.querySelectorAll('.portal');
