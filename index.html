@@ -65,6 +65,35 @@
             width: 800px;
             height: 400px;
             z-index: 100;
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        @media (max-width: 1500px) {
+            .architecture {
+                width: 700px;
+                height: 360px;
+            }
+        }
+
+        @media (max-width: 1350px) {
+            .architecture {
+                width: 600px;
+                height: 320px;
+            }
+            .side-panel {
+                transform: scale(0.92);
+                transform-origin: top center;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .architecture {
+                width: min(520px, 80vw);
+                height: 300px;
+            }
+            .side-panel {
+                display: none;
+            }
         }
 
         /* Central Monolith */
