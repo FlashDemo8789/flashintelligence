@@ -403,21 +403,6 @@
             top: 200px;
             width: 220px;
             z-index: 40;
-            max-height: calc(100vh - 260px);
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .side-panel::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .side-panel::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .side-panel::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
         }
 
         .side-panel.left {
@@ -470,8 +455,8 @@
 
         /* Portfolio Performance */
         .prediction-item {
-            margin-bottom: 14px;
-            padding-bottom: 10px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
@@ -479,19 +464,11 @@
             border-bottom: none;
         }
 
-        .prediction-rank {
-            font-size: 9px;
-            letter-spacing: 0.2em;
-            color: rgba(0, 0, 0, 0.4);
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-
         .prediction-company {
             color: rgba(0, 0, 0, 0.8);
             font-size: 12px;
             font-weight: 500;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .prediction-match {
@@ -508,8 +485,6 @@
         
         #pattern-predictions {
             transition: opacity 0.3s ease;
-            display: flex;
-            flex-direction: column;
         }
 
         /* Corner Metrics */
@@ -966,10 +941,10 @@
     </div>
 
     <!-- Right Side Panel - Pattern Predictions -->
-    <div class="side-panel right">
-        <div class="panel-title">Intelligence Insights</div>
-        <div id="pattern-predictions"></div>
-    </div>
+        <div class="side-panel right">
+            <div class="panel-title">Intelligence Insights</div>
+            <div id="pattern-predictions"></div>
+        </div>
 
     <!-- Main Architecture -->
     <div class="architecture">
@@ -1174,30 +1149,45 @@
             return Array.from({ length: count }, (_, idx) => createPrediction(startSeed + idx));
         }
 
-        function renderPredictionList(list) {
+        function renderPredictionList(list, offset = 0, windowSize = 6) {
             const container = document.getElementById('pattern-predictions');
             if (!container) return;
 
-            container.innerHTML = list.map((pred, index) => `
-                <div class="prediction-item">
-                    <div class="prediction-rank">#${String(index + 1).padStart(2, '0')}</div>
-                    <div class="prediction-company">${pred.company}</div>
-                    <div class="prediction-match">${pred.match}</div>
-                    <div class="prediction-outcome">${pred.outcome}</div>
-                </div>
-            `).join('');
+            const window = list.slice(offset, offset + windowSize);
+            container.style.opacity = '0.3';
+            setTimeout(() => {
+                container.innerHTML = window.map((pred, index) => `
+                    <div class="prediction-item">
+                        <div class="prediction-company">${pred.company}</div>
+                        <div class="prediction-match">${pred.match}</div>
+                        <div class="prediction-outcome">${pred.outcome}</div>
+                    </div>
+                `).join('');
+                container.style.opacity = '1';
+            }, 200);
         }
 
         let predictionSeed = 0;
         let predictionData = generatePredictionData(100, predictionSeed);
-        renderPredictionList(predictionData);
+        let lastSeedUsed = predictionSeed + predictionData.length - 1;
+        let predictionOffset = 0;
+        const predictionWindow = 6;
 
-        // Refresh the tail of the list every minute with a new data point
-        setInterval(() => {
-            predictionSeed += 1;
-            predictionData = [...predictionData.slice(1), createPrediction(predictionSeed + 99)];
-            renderPredictionList(predictionData);
-        }, 60000);
+        function advancePredictions() {
+            predictionOffset += predictionWindow;
+            if (predictionOffset + predictionWindow > predictionData.length) {
+                const newBatch = Array.from({ length: predictionWindow }, () => {
+                    lastSeedUsed += 1;
+                    return createPrediction(lastSeedUsed);
+                });
+                predictionData = [...predictionData.slice(predictionWindow), ...newBatch];
+                predictionOffset = predictionData.length - predictionWindow;
+            }
+            renderPredictionList(predictionData, predictionOffset, predictionWindow);
+        }
+
+        renderPredictionList(predictionData, predictionOffset, predictionWindow);
+        setInterval(advancePredictions, 8000);
         
         // Portal sublabel rotation
         const fundSublabels = [
