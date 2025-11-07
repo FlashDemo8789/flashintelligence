@@ -62,37 +62,16 @@
         /* Main Architecture */
         .architecture {
             position: relative;
-            width: 800px;
-            height: 400px;
+            width: clamp(560px, 60vw, 960px);
+            height: clamp(320px, 30vw, 460px);
             z-index: 100;
             transition: width 0.4s ease, height 0.4s ease;
         }
 
-        @media (max-width: 1500px) {
-            .architecture {
-                width: 700px;
-                height: 360px;
-            }
-        }
-
-        @media (max-width: 1350px) {
-            .architecture {
-                width: 600px;
-                height: 320px;
-            }
-            .side-panel {
-                transform: scale(0.92);
-                transform-origin: top center;
-            }
-        }
-
         @media (max-width: 1200px) {
             .architecture {
-                width: min(520px, 80vw);
-                height: 300px;
-            }
-            .side-panel {
-                display: none;
+                width: min(540px, 88vw);
+                height: 320px;
             }
         }
 
@@ -176,12 +155,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: clamp(24px, 6vw, 120px);
+            padding: 0 clamp(10px, 4vw, 60px);
         }
 
         .portal {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: clamp(240px, 24vw, 320px);
+            height: clamp(240px, 24vw, 320px);
             cursor: pointer;
             transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
