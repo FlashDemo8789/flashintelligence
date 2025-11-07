@@ -62,9 +62,34 @@
         /* Main Architecture */
         .architecture {
             position: relative;
-            width: 800px;
-            height: 400px;
+            width: clamp(540px, 55vw, 820px);
+            height: clamp(320px, 28vw, 420px);
             z-index: 100;
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .desktop-layout {
+            display: grid;
+            grid-template-columns: minmax(200px, 240px) minmax(560px, 1fr) minmax(200px, 240px);
+            grid-template-areas: 'left center right';
+            align-items: center;
+            gap: clamp(30px, 4vw, 80px);
+            width: min(1400px, 92vw);
+            margin: 0 auto;
+            position: relative;
+            z-index: 60;
+        }
+
+        .desktop-layout .side-panel.left {
+            grid-area: left;
+        }
+
+        .desktop-layout .architecture {
+            grid-area: center;
+        }
+
+        .desktop-layout .side-panel.right {
+            grid-area: right;
         }
 
         /* Central Monolith */
@@ -147,12 +172,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: clamp(30px, 4vw, 120px);
+            flex-wrap: wrap;
         }
 
         .portal {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: clamp(220px, 20vw, 300px);
+            height: clamp(220px, 20vw, 300px);
             cursor: pointer;
             transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
@@ -397,18 +424,15 @@
 
         /* Side Panels */
         .side-panel {
-            position: fixed;
-            top: 200px;
-            width: 200px;
+            position: relative;
+            width: min(240px, 100%);
             z-index: 40;
         }
 
-        .side-panel.left {
-            left: 60px;
-        }
-
+        .side-panel.left,
         .side-panel.right {
-            right: 60px;
+            left: auto;
+            right: auto;
         }
 
         .panel-title {
@@ -602,6 +626,41 @@
             color: rgba(0, 0, 0, 0.6);
             margin-top: 8px;
             cursor: help;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1500px) {
+            .desktop-layout {
+                width: min(1200px, 95vw);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .desktop-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    'left'
+                    'center'
+                    'right';
+            }
+
+            .side-panel {
+                width: min(420px, 100%);
+                margin: 0 auto;
+            }
+
+            .panel-title {
+                text-align: center;
+            }
+
+            .portal-container {
+                position: relative;
+                justify-content: center;
+            }
+
+            .camp-display {
+                gap: 24px;
+            }
         }
 
         /* Loading Animation */
@@ -897,128 +956,130 @@
         <div class="metric-label">Next Fund Closing</div>
     </div>
 
-    <!-- Left Side Panel - Sector Heat Map -->
-    <div class="side-panel left">
-        <div class="panel-title">Sector Activity</div>
-        <div class="sector-item">
-            <span class="sector-name">AI/ML</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 82%;"></div>
+    <div class="desktop-layout">
+        <!-- Left Side Panel - Sector Heat Map -->
+        <div class="side-panel left">
+            <div class="panel-title">Sector Activity</div>
+            <div class="sector-item">
+                <span class="sector-name">AI/ML</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 82%;"></div>
+                </div>
+            </div>
+            <div class="sector-item">
+                <span class="sector-name">Fintech</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 67%;"></div>
+                </div>
+            </div>
+            <div class="sector-item">
+                <span class="sector-name">Climate</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 45%;"></div>
+                </div>
+            </div>
+            <div class="sector-item">
+                <span class="sector-name">Biotech</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 38%;"></div>
+                </div>
+            </div>
+            <div class="sector-item">
+                <span class="sector-name">Enterprise</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 56%;"></div>
+                </div>
+            </div>
+            <div class="sector-item">
+                <span class="sector-name">Consumer</span>
+                <div class="sector-bar">
+                    <div class="sector-fill" style="width: 29%;"></div>
+                </div>
             </div>
         </div>
-        <div class="sector-item">
-            <span class="sector-name">Fintech</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 67%;"></div>
-            </div>
-        </div>
-        <div class="sector-item">
-            <span class="sector-name">Climate</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 45%;"></div>
-            </div>
-        </div>
-        <div class="sector-item">
-            <span class="sector-name">Biotech</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 38%;"></div>
-            </div>
-        </div>
-        <div class="sector-item">
-            <span class="sector-name">Enterprise</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 56%;"></div>
-            </div>
-        </div>
-        <div class="sector-item">
-            <span class="sector-name">Consumer</span>
-            <div class="sector-bar">
-                <div class="sector-fill" style="width: 29%;"></div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Right Side Panel - Pattern Predictions -->
-    <div class="side-panel right">
-        <div class="panel-title">Intelligence Insights</div>
-        <div id="pattern-predictions">
-            <div class="prediction-item">
-                <div class="prediction-company">CloudSync • Vertical AI</div>
-                <div class="prediction-match">87% match → Databricks 2020</div>
-                <div class="prediction-outcome">Projected: $2B exit by 2027</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">DataForge • PLG Motion</div>
-                <div class="prediction-match">92% match → Snowflake 2019</div>
-                <div class="prediction-outcome">Tracking: Series B signals</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">NeuralAPI • API-First</div>
-                <div class="prediction-match">78% match → Twilio 2015</div>
-                <div class="prediction-outcome">Risk: Commoditization 18mo</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">PayFlow • Dev Tools</div>
-                <div class="prediction-match">83% match → Stripe 2014</div>
-                <div class="prediction-outcome">Next milestone: $10M ARR</div>
-            </div>
-            <div class="prediction-item">
-                <div class="prediction-company">MindBridge • Health AI</div>
-                <div class="prediction-match">71% match → Veeva 2011</div>
-                <div class="prediction-outcome">FDA approval critical path</div>
+        <!-- Right Side Panel - Pattern Predictions -->
+        <div class="side-panel right">
+            <div class="panel-title">Intelligence Insights</div>
+            <div id="pattern-predictions">
+                <div class="prediction-item">
+                    <div class="prediction-company">CloudSync • Vertical AI</div>
+                    <div class="prediction-match">87% match → Databricks 2020</div>
+                    <div class="prediction-outcome">Projected: $2B exit by 2027</div>
+                </div>
+                <div class="prediction-item">
+                    <div class="prediction-company">DataForge • PLG Motion</div>
+                    <div class="prediction-match">92% match → Snowflake 2019</div>
+                    <div class="prediction-outcome">Tracking: Series B signals</div>
+                </div>
+                <div class="prediction-item">
+                    <div class="prediction-company">NeuralAPI • API-First</div>
+                    <div class="prediction-match">78% match → Twilio 2015</div>
+                    <div class="prediction-outcome">Risk: Commoditization 18mo</div>
+                </div>
+                <div class="prediction-item">
+                    <div class="prediction-company">PayFlow • Dev Tools</div>
+                    <div class="prediction-match">83% match → Stripe 2014</div>
+                    <div class="prediction-outcome">Next milestone: $10M ARR</div>
+                </div>
+                <div class="prediction-item">
+                    <div class="prediction-company">MindBridge • Health AI</div>
+                    <div class="prediction-match">71% match → Veeva 2011</div>
+                    <div class="prediction-outcome">FDA approval critical path</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Main Architecture -->
-    <div class="architecture">
-        <!-- Title -->
-        <h1 class="title">FLASH</h1>
-
-        <!-- Central Monolith -->
-        <div class="monolith"></div>
+        <!-- Main Architecture -->
+        <div class="architecture">
+            <!-- Title -->
+            <h1 class="title">FLASH</h1>
         
-        <!-- Central Fundability Score -->
-        <div class="fundability-score" id="fundability-container">
-            <div class="score-value" id="fundability-value">32</div>
-            <div class="score-label">Fundability</div>
-            <div class="threshold-indicator" id="percentile-indicator" style="font-size: 7px; opacity: 0.6; margin-top: 2px;">Below Average</div>
-        </div>
-
-        <!-- Connection Lines -->
-        <div class="connection"></div>
-
-        <!-- Data Stream -->
-        <div class="data-stream">
-            <div class="data-pulse"></div>
-            <div class="data-pulse reverse" style="animation-delay: 1.5s;"></div>
-        </div>
-
-        <!-- Portal Container -->
-        <div class="portal-container">
-            <!-- Fund Portal -->
-            <a href="https://flash.onl" class="portal">
-                <div class="frame outer"></div>
-                <div class="frame middle"></div>
-                <div class="frame inner"></div>
-                <div class="center-point"></div>
-                <div class="portal-label">
-                    Fund
-                    <div class="portal-sublabel" id="fund-sublabel">Pre-Seed to Series A</div>
-                </div>
-            </a>
-
-            <!-- Intelligence Portal -->
-            <a href="https://flashintelligence.co" class="portal">
-                <div class="frame outer"></div>
-                <div class="frame middle"></div>
-                <div class="frame inner"></div>
-                <div class="center-point"></div>
-                <div class="portal-label">
-                    Intelligence
-                    <div class="portal-sublabel" id="intelligence-sublabel">Pattern Recognition Engine</div>
-                </div>
-            </a>
+            <!-- Central Monolith -->
+            <div class="monolith"></div>
+            
+            <!-- Central Fundability Score -->
+            <div class="fundability-score" id="fundability-container">
+                <div class="score-value" id="fundability-value">32</div>
+                <div class="score-label">Fundability</div>
+                <div class="threshold-indicator" id="percentile-indicator" style="font-size: 7px; opacity: 0.6; margin-top: 2px;">Below Average</div>
+            </div>
+        
+            <!-- Connection Lines -->
+            <div class="connection"></div>
+        
+            <!-- Data Stream -->
+            <div class="data-stream">
+                <div class="data-pulse"></div>
+                <div class="data-pulse reverse" style="animation-delay: 1.5s;"></div>
+            </div>
+        
+            <!-- Portal Container -->
+            <div class="portal-container">
+                <!-- Fund Portal -->
+                <a href="https://flash.onl" class="portal">
+                    <div class="frame outer"></div>
+                    <div class="frame middle"></div>
+                    <div class="frame inner"></div>
+                    <div class="center-point"></div>
+                    <div class="portal-label">
+                        Fund
+                        <div class="portal-sublabel" id="fund-sublabel">Pre-Seed to Series A</div>
+                    </div>
+                </a>
+        
+                <!-- Intelligence Portal -->
+                <a href="https://flashintelligence.co" class="portal">
+                    <div class="frame outer"></div>
+                    <div class="frame middle"></div>
+                    <div class="frame inner"></div>
+                    <div class="center-point"></div>
+                    <div class="portal-label">
+                        Intelligence
+                        <div class="portal-sublabel" id="intelligence-sublabel">Pattern Recognition Engine</div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 
